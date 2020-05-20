@@ -6,6 +6,7 @@ public class Cell {
     boolean bottom;
     boolean filled;
 
+
     public Cell(boolean right, boolean bottom, boolean filled) {
         this.right = right;
         this.bottom = bottom;
