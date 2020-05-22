@@ -34,42 +34,7 @@ public class Play {
             turnB = true;
     }
 
-    void getMove() {
-
-
-        if (turnA) {
-            System.out.println("A turn.");
-
-            currX = game.posA.x;
-            currY = game.posA.y;
-            player = 'A';
-        } else {
-            System.out.println("B turn.");
-            currX = game.posB.x;
-            currY = game.posB.y;
-            player = 'B';
-        }
-
-        System.out.println("enter move type (W or M):");
-
-//        dir = input.next().charAt(0);
-
-        if (dir == 'W') // put the wall
-        {
-            if ((turnA && wallA == 0) || (turnB && wallB == 0)) {
-                System.out.println("Your walls are finished, only moving is valid!");
-                //repetitiveMove();
-            } else {
-                //putthingWall(player);
-            }
-
-        } else if (dir == 'M') {
-        } // move player
-        //repetitiveMove();
-
-    }
-
-    String putthingWall(boolean turnA1, int x1, int y1, int x2, int y2) {
+    String puttingWall(boolean turnA1, int x1, int y1, int x2, int y2) {
 
         if ((turnA1 && wallA == 0) || (turnB && wallB == 0)) {
             System.out.println("Your walls are finished, only moving is valid!");
@@ -94,67 +59,21 @@ public class Play {
                 } else {
                     System.out.println("invalid value! enter a new value");
                     return "invalidWall";
-                    //putthingWall(player);
                 }
             } else {
                 System.out.println("invalid value! enter a new value");
                 return "wallExists";
-                //putthingWall(player);
             }
         } else {
             System.out.println("invalid value! enter a new value");
             return "invalidWall";
-            //putthingWall(player);
+
         }
 
         turnA = !turnA;
         turnB = !turnB;
         return "ok";
     }
-
-//    void repetitiveMove() {
-//        System.out.println("what direction?");
-//        moveType = input.next().charAt(0);
-//
-//        if (moveType == 'U') {
-//            if (currX - 2 < 0 || game.board[currX - 2][currY] != '.') { // dealing with the top line
-//                System.out.println("invalid move! enter a new move");
-//                repetitiveMove();
-//            } else  // cell is empty and no dealing
-//                game.movePlayer(player, currX - 2, currY);
-//        }
-//
-//        if (moveType == 'D') {
-//            if (currX + 2 > 16 || game.board[currX + 2][currY] != '.') { // dealing with the bottom line
-//                System.out.println("invalid move! enter a new move");
-//                repetitiveMove();
-//            } else {
-//                game.movePlayer(player, currX + 2, currY);
-//            }
-//        }
-//
-//        if (moveType == 'L') {
-//            if (currY - 2 < 0 || game.board[currX][currY - 2] != '.') { // dealing with the left line
-//                System.out.println("invalid move! enter a new move");
-//                repetitiveMove();
-//            } else
-//                game.movePlayer(player, currX, currY - 2);
-//        }
-//
-//        if (moveType == 'R') {
-//            if (currY + 2 > 16 || game.board[currX][currY + 2] != '.') { // dealing with the right line
-//                System.out.println("invalid move! enter a new move");
-//                repetitiveMove();
-//            } else
-//                game.movePlayer(player, currX, currY + 2);
-//        }
-//
-//        if (moveType == 'J') { // jump move
-//
-//            // coordinate
-//            // check different moves
-//        }
-//    }
 
     String move(boolean turnA1, int x, int y) {
 
@@ -509,7 +428,6 @@ class Test {
         play.rand();
         while (!stop) {
             play.showState();
-            play.getMove();
             if (play.goalState())
                 stop = true;
         }

@@ -1,7 +1,6 @@
 package Model;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -10,13 +9,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-import java.util.LinkedList;
-import java.util.Queue;
 
 import static javafx.application.Platform.exit;
 
@@ -172,7 +167,7 @@ public class Main extends Application {
                 if (count == 2) {
 
                     warningText.setText("pick ");
-                    warn = play.putthingWall(play.turnA, x1, y1, x2, y2);
+                    warn = play.puttingWall(play.turnA, x1, y1, x2, y2);
                     warningText.setText("pick 1");
                     if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls")) {
                         warningText.setText(warn);
