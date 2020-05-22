@@ -9,8 +9,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static javafx.application.Platform.exit;
@@ -27,10 +27,12 @@ public class Main extends Application {
     int x1, y1, x2, y2;
     int count = 0;
 
+    public static void main(String[] args) {
+        launch(args);
+
+    }
 
     private Parent createContent() {
-
-
         Pane root = new Pane();
         root.setPrefSize(800, 600);
 
@@ -115,6 +117,14 @@ public class Main extends Application {
         play.rand();
 
         showTurn();
+    }
+
+    void showTurn() {
+        if (play.turnB)
+            turnText.setText("B turn");
+        else
+            turnText.setText("A turn");
+        play.showState();
     }
 
     private class Tile extends StackPane {
@@ -226,18 +236,5 @@ public class Main extends Application {
             }
 
         }
-    }
-
-    void showTurn() {
-        if (play.turnB)
-            turnText.setText("B turn");
-        else
-            turnText.setText("A turn");
-        play.showState();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-
     }
 }

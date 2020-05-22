@@ -1,20 +1,28 @@
 package Model;
 
-
-import java.util.Scanner;
+import java.util.LinkedList;
 
 import static java.lang.StrictMath.abs;
 
+class Point {
+    int x;
+    int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
 
 public class Play {
-    Scanner input = new Scanner(System.in);
-    Board game = new Board();
-    int x1, y1, x2, y2;
+    Board game = new Board('W');
+    Board path = new Board('W');
     int currX, currY;
     boolean turnA = false, turnB = false;
-    char player, moveType, dir;
+    char player;
     int wallB = 10, wallA = 10;
-    int xa, xb, ya, yb;
+    int rowNum[] = {-1, 0, 0, 1};
+    int colNum[] = {0, -1, 1, 0};
 
     void showState() {
         for (int i = 0; i < 17; i++) {
@@ -23,7 +31,7 @@ public class Play {
             }
             System.out.println("");
         }
-        System.out.println("-----------------------------------------------------------------");
+        System.out.println("---------------------------------------------");
     }
 
     // random first player
@@ -35,7 +43,6 @@ public class Play {
     }
 
     String puttingWall(boolean turnA1, int x1, int y1, int x2, int y2) {
-
         if ((turnA1 && wallA == 0) || (turnB && wallB == 0)) {
             System.out.println("Your walls are finished, only moving is valid!");
             return "noWalls";
@@ -43,35 +50,37 @@ public class Play {
         int temp1 = (y1 + y2) / 2;
         int temp2 = (x1 + x2) / 2;
         if ((x1 % 2 == 1 && (game.board[x1 + 1][temp1] != 'W' || game.board[x1 - 1][temp1] != 'W')) || ((y1 % 2 == 1 && (game.board[temp2][y1 - 1] != 'W' || game.board[temp2][y1 + 1] != 'W')))) {
-            // inja bayad check konim mishe divar gozasht ya na
-            // if ok ...
             if (game.board[x1][y1] == 0 && game.board[x2][y2] == 0) {
                 if ((y1 == y2 && y1 % 2 == 1 && abs(x1 - x2) == 2) || (x1 == x2 && x1 % 2 == 1 && abs(y1 - y2) == 2)) {
-                    game.putWall(x1, y1, x2, y2);
-                    if (turnA1) {
-                        wallA--;
-                        System.out.println("number of wall A: " + wallA);
+                    path.putWall(x1, y1, x2, y2);
+                    if (hasPath(path)) {
+                        game.putWall(x1, y1, x2, y2);
+                        if (turnA1) {
+                            wallA--;
+                            System.out.println("number of wall A: " + wallA);
+                        } else {
+                            wallB--;
+                            System.out.println("number of wall B: " + wallB);
+                        }
                     } else {
-                        wallB--;
-                        System.out.println("number of wall B: " + wallB);
-
+                        System.out.println("illegal wall!");
+                        path.removeWall(x1, y1, x2, y2);
+                        return "invalidWall";
                     }
                 } else {
-                    System.out.println("invalid value! enter a new value");
+                    System.out.println("illegal wall!");
                     return "invalidWall";
                 }
             } else {
-                System.out.println("invalid value! enter a new value");
+                System.out.println("illegal wall!");
                 return "wallExists";
             }
         } else {
-            System.out.println("invalid value! enter a new value");
+            System.out.println("illegal wall!");
             return "invalidWall";
-
         }
 
-        turnA = !turnA;
-        turnB = !turnB;
+        updateTurn();
         return "ok";
     }
 
@@ -87,6 +96,7 @@ public class Play {
                     if (game.board[posx][posy - 2] != 'B') {
                         if ((posx == x) && (posy - 2 == y)) {
                             game.movePlayer('A', currX, currY - 2);
+                            path.movePlayer('A', currX, currY - 2);
                             updateCurrent();
                             System.out.println("moved");
                             return "ok";
@@ -99,6 +109,7 @@ public class Play {
                                 if (posx - 2 == x && posy - 2 == y) {
                                     System.out.println("Yppp2");
                                     game.movePlayer('A', currX - 2, currY - 2);
+                                    path.movePlayer('A', currX - 2, currY - 2);
                                     System.out.println("Yppp3");
                                     updateCurrent();
                                     return "ok";
@@ -107,15 +118,16 @@ public class Play {
                             if (posx <= 15 && game.board[posx + 1][posy - 2] != 'W') {
                                 if (posx + 2 == x && posy - 2 == y) {
                                     game.movePlayer('A', currX + 2, currY - 2);
+                                    path.movePlayer('A', currX + 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
                         } else if (posy >= 4 && posy - 4 == y && posx == x) {
                             game.movePlayer('A', currX, currY - 4);
+                            path.movePlayer('A', currX, currY - 4);
                             return "ok";
                         }
-
 
                     }
                 }
@@ -125,6 +137,7 @@ public class Play {
                     if (game.board[posx][posy + 2] != 'B') {
                         if ((posx == x) && (posy + 2 == y)) {
                             game.movePlayer('A', currX, currY + 2);
+                            path.movePlayer('A', currX, currY + 2);
                             updateCurrent();
                             return "ok";
                         }
@@ -133,6 +146,7 @@ public class Play {
                             if (posx >= 2 && game.board[posx - 1][posy + 2] != 'W') {
                                 if (posx - 2 == x && posy + 2 == y) {
                                     game.movePlayer('A', currX - 2, currY + 2);
+                                    path.movePlayer('A', currX - 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
@@ -140,12 +154,14 @@ public class Play {
                             if (posx <= 15 && game.board[posx + 1][posy + 2] != 'W') {
                                 if (posx + 2 == x && posy + 2 == y) {
                                     game.movePlayer('A', currX + 2, currY + 2);
+                                    path.movePlayer('A', currX + 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
                         } else if (posy <= 13 && posy + 4 == y && posx == x) {
                             game.movePlayer('A', currX, currY + 4);
+                            path.movePlayer('A', currX, currY + 4);
                             updateCurrent();
                             return "ok";
                         }
@@ -342,7 +358,7 @@ public class Play {
                             }
                             if (posy <= 15 && game.board[posx + 2][posy + 1] != 'W') {
                                 if (posx + 2 == x && posy + 2 == y) {
-                                    game.movePlayer('B', currX + 2, currY + 1);
+                                    game.movePlayer('B', currX + 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
@@ -356,21 +372,73 @@ public class Play {
                     }
                 }
             }
+        }
+        return "false";
+    }
 
+    boolean isValid(int row, int col) {
+        return (row >= 0) && (row < 17) && (col >= 0) && (col < 17);
+    }
+
+    boolean BFS(char[][] board, Point src, Point dest) {
+        if (board[dest.x][dest.y] == 'W')
+            return false;
+
+        boolean[][] visited = new boolean[17][17];
+
+        visited[src.x][src.y] = true;
+
+        LinkedList<Point> q = new LinkedList<Point>();
+
+        q.push(src);
+
+        int row, col;
+        while (!q.isEmpty()) {
+            Point pt = q.peek();
+            if (pt.x == dest.x && pt.y == dest.y) // reach end
+                return true;
+
+            q.pop();
+
+            for (int i = 0; i < 4; i++) {
+                row = pt.x + rowNum[i];
+                col = pt.y + colNum[i];
+
+                if (isValid(row, col) && board[row][col] != 'W' && !visited[row][col]) { // 0 = WALL
+                    visited[row][col] = true;
+                    Point prvPoint = new Point(row, col);
+                    q.push(prvPoint);
+                }
+            }
+        }
+        return false;
+    }
+
+    boolean hasPath(Board path) {
+        boolean pathA = false, pathB = false;
+        Point pointA = new Point(path.posA.x, path.posA.y);
+        Point pointB = new Point(path.posB.x, path.posB.y);
+
+        for (int i = 0; i < 9; i++) { // path for A
+            Point dest = new Point(16, i * 2);
+            if (BFS(path.board, pointA, dest))
+                pathA = true;
         }
 
-        return "false";
+        for (int i = 0; i < 9; i++) { // path for B
+            Point dest = new Point(0, i * 2);
+            if (BFS(path.board, pointB, dest))
+                pathB = true;
+        }
+        return pathA && pathB;
     }
 
     void updateCurrent() {
         if (turnA) {
-            //System.out.println("A turn.");
-
             currX = game.posA.x;
             currY = game.posA.y;
             player = 'A';
         } else {
-//            System.out.println("B turn.");
             currX = game.posB.x;
             currY = game.posB.y;
             player = 'B';
@@ -380,28 +448,6 @@ public class Play {
     void updateTurn() {
         turnA = !turnA;
         turnB = !turnB;
-    }
-
-    void jumpMove() {
-        if (turnA) {
-            xa = game.posA.x;
-            ya = game.posA.y;
-            xb = game.posB.x;
-            yb = game.posB.y;
-            if (ya == yb && xa + 2 == xb && game.board[xa + 1][ya] != '_') // b below a , no wall between them
-            {
-                if (game.board[xb - 1][yb] == '_') // wall below b
-                {
-
-                } else if (game.board[xb - 1][yb] != '_') // nothing below b
-                {
-                    if (currX + 4 < 17)
-                        game.movePlayer(player, currX + 4, currY);
-                }
-            }
-        } else {
-
-        }
     }
 
     boolean goalState() {
@@ -420,16 +466,16 @@ public class Play {
     }
 }
 
-class Test {
-    public static void main(String[] args) {
-
-        Play play = new Play();
-        boolean stop = false;
-        play.rand();
-        while (!stop) {
-            play.showState();
-            if (play.goalState())
-                stop = true;
-        }
-    }
-}
+//class Test {
+//    public static void main(String[] args) {
+//
+//        Play play = new Play();
+//        boolean stop = false;
+//        play.rand();
+//        while (!stop) {
+//            play.showState();
+//            if (play.goalState())
+//                stop = true;
+//        }
+//    }
+//}

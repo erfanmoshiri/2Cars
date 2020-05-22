@@ -34,6 +34,23 @@ public class Board {
         // other cells are free in the start
     }
 
+    public Board(char ban) {
+        for (int i = 0; i < 17; i++) {
+            for (int j = 0; j < 17; j++) {
+                if (i % 2 == 0 && j % 2 == 0) {
+                    board[i][j] = '.';
+                }
+                if (i % 2 == 1 && j % 2 == 1) {
+                    board[i][j] = ban;
+                }
+            }
+        }
+        board[posA.x][posA.y] = 'A'; //start point of first player
+        board[posB.x][posB.y] = 'B'; //start point of second player
+        // other cells are free in the start
+    }
+
+
     void movePlayer(char player, int x, int y) { // move is valid , x,y are next state
         if (player == 'A') {
             board[posA.x][posA.y] = '.';
@@ -50,5 +67,10 @@ public class Board {
     {
         board[x1][y1] = 'W';
         board[x2][y2] = 'W';
+    }
+
+    void removeWall(int x1, int y1, int x2, int y2) {
+        board[x1][y1] = 0;
+        board[x2][y2] = 0;
     }
 }
