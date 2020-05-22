@@ -15,34 +15,31 @@ import javafx.stage.Stage;
 
 import static javafx.application.Platform.exit;
 
-
 public class Main extends Application {
-
-
-    Pane root;
     Tile[][] tiles;
     Text turnText;
     Text warningText;
+    Text wallsNum;
     Play play;
     int x1, y1, x2, y2;
     int count = 0;
 
     public static void main(String[] args) {
         launch(args);
-
     }
 
     private Parent createContent() {
         Pane root = new Pane();
         root.setPrefSize(800, 600);
 
-        Button button = new Button("start");
-        button.setTranslateX(50);
-        button.setLayoutY(50);
+        Button button = new Button("START");
+        button.setTranslateX(370);
+        button.setLayoutY(260);
         root.getChildren().add(button);
 
         warningText = new Text("warning");
         turnText = new Text("yours turn");
+        wallsNum = new Text("number of walls");
         play = new Play();
 
         button.setOnMouseClicked(mouseEvent -> {
@@ -50,12 +47,10 @@ public class Main extends Application {
             startGame();
 
         });
-
         return root;
     }
 
     void init(Pane root) {
-
         tiles = new Tile[17][17];
         for (int i = 0; i < 17; i++) {
             for (int j = 0; j < 17; j++) {
@@ -65,7 +60,6 @@ public class Main extends Application {
         int x = 0, y = 0;
         for (int i = 0; i < 17; i++) {
             for (int j = 0; j < 17; j++) {
-
                 Tile tile = tiles[i][j];
                 tile.setTranslateX(x);
                 tile.setTranslateY(y);
@@ -80,26 +74,25 @@ public class Main extends Application {
                 y += 50;
             else
                 y += 10;
-
-
         }
-
 
         turnText.setFont(Font.font(15));
         turnText.setTranslateX(580);
         turnText.setTranslateY(35);
         root.getChildren().add(turnText);
 
-
         warningText.setFont(Font.font(15));
         warningText.setTranslateX(580);
-        warningText.setTranslateY(80);
+        warningText.setTranslateY(125);
         root.getChildren().add(warningText);
 
+        wallsNum.setFont(Font.font(15));
+        wallsNum.setTranslateX(580);
+        wallsNum.setTranslateY(80);
+        root.getChildren().add(wallsNum);
 
         tiles[0][8].setText("A");
         tiles[16][8].setText("B");
-
     }
 
     @Override
@@ -108,22 +101,22 @@ public class Main extends Application {
         primaryStage.setTitle("Quoridor");
         primaryStage.setScene(new Scene(createContent()));
         primaryStage.setResizable(true);
-
         primaryStage.show();
-
     }
 
     private void startGame() {
         play.rand();
-
         showTurn();
     }
 
     void showTurn() {
-        if (play.turnB)
-            turnText.setText("B turn");
-        else
-            turnText.setText("A turn");
+        if (play.turnB) {
+            turnText.setText("It's B Turn");
+            wallsNum.setText("Remaining Walls: " + play.wallB);
+        } else {
+            turnText.setText("It's A Turn");
+            wallsNum.setText("Remaining Walls: " + play.wallA);
+        }
         play.showState();
     }
 
@@ -151,7 +144,6 @@ public class Main extends Application {
             text = new Text();
             getChildren().addAll(boarder, text);
             setOnMouseClicked(event -> played(i, j));
-
         }
 
         void setText(String s) {
@@ -159,32 +151,30 @@ public class Main extends Application {
         }
 
         void played(int i, int j) {
-
             if ((i % 2 == 1 || j % 2 == 1) && (i % 2 == 0 || j % 2 == 0)) {
                 count++;
                 if (count == 1) {
                     x1 = i;
                     y1 = j;
-                    warningText.setText("pick second wall");
+                    warningText.setText("Pick Second Wall");
                 } else {
                     x2 = i;
                     y2 = j;
                 }
 
                 System.out.println(i + ", " + j);
-
                 String warn = "";
+
                 if (count == 2) {
 
                     warningText.setText("pick ");
-                    warn = play.puttingWall(play.turnA, x1, y1, x2, y2);
+                    warn = play.puttingWall(x1, y1, x2, y2);
                     warningText.setText("pick 1");
-                    if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls")) {
+                    if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls,only move")) {
                         warningText.setText(warn);
                         count = 0;
                     } else if (warn.equals("ok")) {
-                        warningText.setText("wall placed");
-
+                        warningText.setText("Wall Placed");
                         System.out.println(x1 + ", " + y1);
                         tiles[x1][y1].boarder.setFill(Color.BLACK);
                         System.out.println(x2 + ", " + y2);
@@ -197,7 +187,6 @@ public class Main extends Application {
                     showTurn();
                 }
             } else if ((i % 2 == 0 && j % 2 == 0)) {
-
                 int x, y;
                 char c;
                 if (play.turnA) {
@@ -209,19 +198,19 @@ public class Main extends Application {
                     y = play.game.posB.y;
                     c = 'B';
                 }
-                String war = play.move(play.turnA, i, j);
+                String war = play.move(i, j);
                 if (war.equals("ok")) {
-
                     tiles[x][y].text.setText("");
                     tiles[i][j].text.setText(c + "");
                     if (play.goalState()) {
                         if (play.turnA) {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setContentText("PLAYER 'A' IS THE WINNER!");
+                            alert.setContentText("PLAYER 'A' IS WINNER!");
                             alert.showAndWait();
+                            exit();
                         } else {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                            alert.setContentText("PLAYER B' IS THE WINNER!");
+                            alert.setContentText("PLAYER 'B' IS WINNER!");
                             alert.showAndWait();
                             exit();
                         }
@@ -229,12 +218,10 @@ public class Main extends Application {
                         play.updateTurn();
                         showTurn();
                     }
-
                 } else if (war.equals("false")) {
                     warningText.setText("invalid Cell, have another go!");
                 }
             }
-
         }
     }
 }

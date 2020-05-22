@@ -3,24 +3,20 @@ package Model;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class PageLoader {
 
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 650;
     private static Stage stage;
 
     public static Stage getStage() {
         return stage;
     }
-
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 650;
 
     public static void initStage(Stage primaryStage) {
         stage = primaryStage;
@@ -37,6 +33,7 @@ public class PageLoader {
         stage.setScene(new Scene(root, WIDTH, HEIGHT));
         stage.show();
     }
+
     public void load(String URL, Object controller) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(URL));
         fxmlLoader.setController(controller);
