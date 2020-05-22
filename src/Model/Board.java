@@ -48,12 +48,7 @@ public class Board {
 
     void putWall(int x1, int y1, int x2, int y2) //putting wall is valid
     {
-        if (x1 == x2) {
-            board[x1][y1] = '_';
-            board[x2][y2] = '_';
-        } else if (y1 == y2) {
-            board[x1][y1] = '|';
-            board[x2][y2] = '|';
-        }
+        board[x1][y1] = 'W';
+        board[x2][y2] = 'W';
     }
 }

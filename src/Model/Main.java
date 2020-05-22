@@ -1,21 +1,19 @@
 package Model;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import static javafx.application.Platform.exit;
 
 
 public class Main extends Application {
@@ -168,9 +166,8 @@ public class Main extends Application {
                 String warn = "";
                 if (count == 2) {
 
-
                     warningText.setText("pick ");
-                    warn = play.putthingWall(play.turnA, x1, y1, x2, y2);
+                    warn = play.puttingWall(play.turnA, x1, y1, x2, y2);
                     warningText.setText("pick 1");
                     if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls")) {
                         warningText.setText(warn);
@@ -207,8 +204,21 @@ public class Main extends Application {
 
                     tiles[x][y].text.setText("");
                     tiles[i][j].text.setText(c + "");
-                    play.updateTurn();
-                    showTurn();
+                    if (play.goalState()) {
+                        if (play.turnA) {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setContentText("PLAYER 'A' IS THE WINNER!");
+                            alert.showAndWait();
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setContentText("PLAYER B' IS THE WINNER!");
+                            alert.showAndWait();
+                            exit();
+                        }
+                    } else {
+                        play.updateTurn();
+                        showTurn();
+                    }
 
                 } else if (war.equals("false")) {
                     warningText.setText("invalid Cell, have another go!");
