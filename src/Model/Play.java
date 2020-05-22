@@ -3,6 +3,8 @@ package Model;
 
 import java.util.Scanner;
 
+import static java.lang.StrictMath.abs;
+
 
 public class Play {
     Scanner input = new Scanner(System.in);
@@ -56,45 +58,35 @@ public class Play {
         {
             if ((turnA && wallA == 0) || (turnB && wallB == 0)) {
                 System.out.println("Your walls are finished, only moving is valid!");
-                repetitiveMove();
+                //repetitiveMove();
             } else {
                 //putthingWall(player);
             }
 
-        } else if (dir == 'M') // move player
-            repetitiveMove();
-
+        } else if (dir == 'M') {
+        } // move player
+        //repetitiveMove();
 
     }
 
     String putthingWall(boolean turnA1, int x1, int y1, int x2, int y2) {
 
-//        System.out.println("enter coordinates of the start point:");
-//        x1 = input.nextInt();
-//        y1 = input.nextInt();
-//
-//        System.out.println("enter coordinates of the start point:");
-//        x2 = input.nextInt();
-//        y2 = input.nextInt();
-
         if ((turnA1 && wallA == 0) || (turnB && wallB == 0)) {
             System.out.println("Your walls are finished, only moving is valid!");
             return "noWalls";
         }
-
-        if (!(x1 % 2 == 1 && y1 % 2 == 1) && !(x2 % 2 == 1 && y2 % 2 == 1)) {
+        int temp1 = (y1 + y2) / 2;
+        int temp2 = (x1 + x2) / 2;
+        if ((x1 % 2 == 1 && (game.board[x1 + 1][temp1] != 'W' || game.board[x1 - 1][temp1] != 'W')) || ((y1 % 2 == 1 && (game.board[temp2][y1 - 1] != 'W' || game.board[temp2][y1 + 1] != 'W')))) {
             // inja bayad check konim mishe divar gozasht ya na
             // if ok ...
             if (game.board[x1][y1] == 0 && game.board[x2][y2] == 0) {
-                if (x1 == x2 || y1 == y2) {
+                if ((y1 == y2 && y1 % 2 == 1 && abs(x1 - x2) == 2) || (x1 == x2 && x1 % 2 == 1 && abs(y1 - y2) == 2)) {
                     game.putWall(x1, y1, x2, y2);
-                    game.board[x1][y1] = 'W';
-                    game.board[x2][y2] = 'W';
                     if (turnA1) {
                         wallA--;
                         System.out.println("number of wall A: " + wallA);
-                    }
-                    else {
+                    } else {
                         wallB--;
                         System.out.println("number of wall B: " + wallB);
 
@@ -111,6 +103,7 @@ public class Play {
             }
         } else {
             System.out.println("invalid value! enter a new value");
+            return "invalidWall";
             //putthingWall(player);
         }
 
@@ -119,49 +112,49 @@ public class Play {
         return "ok";
     }
 
-    void repetitiveMove() {
-        System.out.println("what direction?");
-        moveType = input.next().charAt(0);
-
-        if (moveType == 'U') {
-            if (currX - 2 < 0 || game.board[currX - 2][currY] != '.') { // dealing with the top line
-                System.out.println("invalid move! enter a new move");
-                repetitiveMove();
-            } else  // cell is empty and no dealing
-                game.movePlayer(player, currX - 2, currY);
-        }
-
-        if (moveType == 'D') {
-            if (currX + 2 > 16 || game.board[currX + 2][currY] != '.') { // dealing with the bottom line
-                System.out.println("invalid move! enter a new move");
-                repetitiveMove();
-            } else {
-                game.movePlayer(player, currX + 2, currY);
-            }
-        }
-
-        if (moveType == 'L') {
-            if (currY - 2 < 0 || game.board[currX][currY - 2] != '.') { // dealing with the left line
-                System.out.println("invalid move! enter a new move");
-                repetitiveMove();
-            } else
-                game.movePlayer(player, currX, currY - 2);
-        }
-
-        if (moveType == 'R') {
-            if (currY + 2 > 16 || game.board[currX][currY + 2] != '.') { // dealing with the right line
-                System.out.println("invalid move! enter a new move");
-                repetitiveMove();
-            } else
-                game.movePlayer(player, currX, currY + 2);
-        }
-
-        if (moveType == 'J') { // jump move
-
-            // coordinate
-            // check different moves
-        }
-    }
+//    void repetitiveMove() {
+//        System.out.println("what direction?");
+//        moveType = input.next().charAt(0);
+//
+//        if (moveType == 'U') {
+//            if (currX - 2 < 0 || game.board[currX - 2][currY] != '.') { // dealing with the top line
+//                System.out.println("invalid move! enter a new move");
+//                repetitiveMove();
+//            } else  // cell is empty and no dealing
+//                game.movePlayer(player, currX - 2, currY);
+//        }
+//
+//        if (moveType == 'D') {
+//            if (currX + 2 > 16 || game.board[currX + 2][currY] != '.') { // dealing with the bottom line
+//                System.out.println("invalid move! enter a new move");
+//                repetitiveMove();
+//            } else {
+//                game.movePlayer(player, currX + 2, currY);
+//            }
+//        }
+//
+//        if (moveType == 'L') {
+//            if (currY - 2 < 0 || game.board[currX][currY - 2] != '.') { // dealing with the left line
+//                System.out.println("invalid move! enter a new move");
+//                repetitiveMove();
+//            } else
+//                game.movePlayer(player, currX, currY - 2);
+//        }
+//
+//        if (moveType == 'R') {
+//            if (currY + 2 > 16 || game.board[currX][currY + 2] != '.') { // dealing with the right line
+//                System.out.println("invalid move! enter a new move");
+//                repetitiveMove();
+//            } else
+//                game.movePlayer(player, currX, currY + 2);
+//        }
+//
+//        if (moveType == 'J') { // jump move
+//
+//            // coordinate
+//            // check different moves
+//        }
+//    }
 
     String move(boolean turnA1, int x, int y) {
 
@@ -176,25 +169,34 @@ public class Play {
                         if ((posx == x) && (posy - 2 == y)) {
                             game.movePlayer('A', currX, currY - 2);
                             updateCurrent();
+                            System.out.println("moved");
                             return "ok";
                         }
                     } else {
                         if (posy >= 3 && game.board[posx][posy - 3] == 'W') {
-                            if (posx >= 1 && game.board[posx - 1][posy - 2] != 'W') {
-                                if (posx - 1 == x && posy - 2 == y) {
-                                    game.movePlayer('A', currX - 1, currY - 2);
+                            System.out.println("Yppp");
+                            if (posx >= 2 && game.board[posx - 1][posy - 2] != 'W') {
+                                System.out.println("Yppp1");
+                                if (posx - 2 == x && posy - 2 == y) {
+                                    System.out.println("Yppp2");
+                                    game.movePlayer('A', currX - 2, currY - 2);
+                                    System.out.println("Yppp3");
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posx <= 16 && game.board[posx + 1][posy - 2] != 'W') {
-                                if (posx + 1 == x && posy - 2 == y) {
-                                    game.movePlayer('A', currX + 1, currY - 2);
+                            if (posx <= 15 && game.board[posx + 1][posy - 2] != 'W') {
+                                if (posx + 2 == x && posy - 2 == y) {
+                                    game.movePlayer('A', currX + 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy >= 4 && posy - 4 == y && posx == x) {
+                            game.movePlayer('A', currX, currY - 4);
+                            return "ok";
                         }
+
 
                     }
                 }
@@ -209,20 +211,24 @@ public class Play {
                         }
                     } else {
                         if (posy <= 14 && game.board[posx][posy + 3] == 'W') {
-                            if (posx >= 1 && game.board[posx - 1][posy + 2] != 'W') {
-                                if (posx - 1 == x && posy + 2 == y) {
-                                    game.movePlayer('A', currX - 1, currY + 2);
+                            if (posx >= 2 && game.board[posx - 1][posy + 2] != 'W') {
+                                if (posx - 2 == x && posy + 2 == y) {
+                                    game.movePlayer('A', currX - 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posx <= 16 && game.board[posx + 1][posy + 2] != 'W') {
-                                if (posx + 1 == x && posy + 2 == y) {
-                                    game.movePlayer('A', currX + 1, currY + 2);
+                            if (posx <= 15 && game.board[posx + 1][posy + 2] != 'W') {
+                                if (posx + 2 == x && posy + 2 == y) {
+                                    game.movePlayer('A', currX + 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy <= 13 && posy + 4 == y && posx == x) {
+                            game.movePlayer('A', currX, currY + 4);
+                            updateCurrent();
+                            return "ok";
                         }
 
                     }
@@ -238,20 +244,24 @@ public class Play {
                         }
                     } else {
                         if (posx >= 3 && game.board[posx - 3][posy] == 'W') {
-                            if (posy >= 1 && game.board[posx - 2][posy - 1] != 'W') {
-                                if (posx - 2 == x && posy - 1 == y) {
-                                    game.movePlayer('A', currX - 2, currY - 1);
+                            if (posy >= 2 && game.board[posx - 2][posy - 1] != 'W') {
+                                if (posx - 2 == x && posy - 2 == y) {
+                                    game.movePlayer('A', currX - 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posy <= 16 && game.board[posx - 2][posy + 1] != 'W') {
-                                if (posx - 2 == x && posy + 1 == y) {
-                                    game.movePlayer('A', currX - 2, currY + 1);
+                            if (posy <= 15 && game.board[posx - 2][posy + 1] != 'W') {
+                                if (posx - 2 == x && posy + 2 == y) {
+                                    game.movePlayer('A', currX - 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy >= 4 && posx - 4 == x && posy == y) {
+                            game.movePlayer('A', currX - 4, currY);
+                            updateCurrent();
+                            return "ok";
                         }
 
                     }
@@ -267,20 +277,24 @@ public class Play {
                         }
                     } else {
                         if (posx <= 14 && game.board[posx + 3][posy] == 'W') {
-                            if (posy >= 1 && game.board[posx + 2][posy - 1] != 'W') {
-                                if (posx + 2 == x && posy - 1 == y) {
-                                    game.movePlayer('A', currX + 2, currY - 1);
+                            if (posy >= 2 && game.board[posx + 2][posy - 1] != 'W') {
+                                if (posx + 2 == x && posy - 2 == y) {
+                                    game.movePlayer('A', currX + 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posy <= 16 && game.board[posx + 2][posy + 1] != 'W') {
-                                if (posx + 2 == x && posy + 1 == y) {
-                                    game.movePlayer('A', currX + 2, currY + 1);
+                            if (posy <= 15 && game.board[posx + 2][posy + 1] != 'W') {
+                                if (posx + 2 == x && posy + 2 == y) {
+                                    game.movePlayer('A', currX + 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy <= 14 && posx + 4 == x && posy == y) {
+                            game.movePlayer('A', currX + 4, currY);
+                            updateCurrent();
+                            return "ok";
                         }
 
                     }
@@ -302,20 +316,23 @@ public class Play {
                         }
                     } else {
                         if (posy >= 3 && game.board[posx][posy - 3] == 'W') {
-                            if (posx >= 1 && game.board[posx - 1][posy - 2] != 'W') {
-                                if (posx - 1 == x && posy - 2 == y) {
-                                    game.movePlayer('B', currX - 1, currY - 2);
+                            if (posx >= 2 && game.board[posx - 1][posy - 2] != 'W') {
+                                if (posx - 2 == x && posy - 2 == y) {
+                                    game.movePlayer('B', currX - 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posx <= 16 && game.board[posx + 1][posy - 2] != 'W') {
-                                if (posx + 1 == x && posy - 2 == y) {
-                                    game.movePlayer('B', currX + 1, currY - 2);
+                            if (posx <= 15 && game.board[posx + 1][posy - 2] != 'W') {
+                                if (posx + 2 == x && posy - 2 == y) {
+                                    game.movePlayer('B', currX + 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy >= 4 && posy - 4 == y && posx == x) {
+                            game.movePlayer('B', currX, currY - 4);
+                            return "ok";
                         }
 
                     }
@@ -331,20 +348,24 @@ public class Play {
                         }
                     } else {
                         if (posy <= 14 && game.board[posx][posy + 3] == 'W') {
-                            if (posx >= 1 && game.board[posx - 1][posy + 2] != 'W') {
-                                if (posx - 1 == x && posy + 2 == y) {
-                                    game.movePlayer('B', currX - 1, currY + 2);
+                            if (posx >= 2 && game.board[posx - 1][posy + 2] != 'W') {
+                                if (posx - 2 == x && posy + 2 == y) {
+                                    game.movePlayer('B', currX - 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posx <= 16 && game.board[posx + 1][posy + 2] != 'W') {
-                                if (posx + 1 == x && posy + 2 == y) {
-                                    game.movePlayer('B', currX + 1, currY + 2);
+                            if (posx <= 15 && game.board[posx + 1][posy + 2] != 'W') {
+                                if (posx + 2 == x && posy + 2 == y) {
+                                    game.movePlayer('B', currX + 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy <= 13 && posy + 4 == y && posx == x) {
+                            game.movePlayer('B', currX, currY + 4);
+                            updateCurrent();
+                            return "ok";
                         }
 
                     }
@@ -360,20 +381,24 @@ public class Play {
                         }
                     } else {
                         if (posx >= 3 && game.board[posx - 3][posy] == 'W') {
-                            if (posy >= 1 && game.board[posx - 2][posy - 1] != 'W') {
-                                if (posx - 2 == x && posy - 1 == y) {
-                                    game.movePlayer('B', currX - 2, currY - 1);
+                            if (posy >= 2 && game.board[posx - 2][posy - 1] != 'W') {
+                                if (posx - 2 == x && posy - 2 == y) {
+                                    game.movePlayer('B', currX - 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posy <= 16 && game.board[posx - 2][posy + 1] != 'W') {
-                                if (posx - 2 == x && posy + 1 == y) {
-                                    game.movePlayer('B', currX - 2, currY + 1);
+                            if (posy <= 15 && game.board[posx - 2][posy + 1] != 'W') {
+                                if (posx - 2 == x && posy + 2 == y) {
+                                    game.movePlayer('B', currX - 2, currY + 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy >= 4 && posx - 4 == x && posy == y) {
+                            game.movePlayer('B', currX - 4, currY);
+                            updateCurrent();
+                            return "ok";
                         }
 
                     }
@@ -389,20 +414,24 @@ public class Play {
                         }
                     } else {
                         if (posx <= 14 && game.board[posx + 3][posy] == 'W') {
-                            if (posy >= 1 && game.board[posx + 2][posy - 1] != 'W') {
-                                if (posx + 2 == x && posy - 1 == y) {
-                                    game.movePlayer('B', currX + 2, currY - 1);
+                            if (posy >= 2 && game.board[posx + 2][posy - 1] != 'W') {
+                                if (posx + 2 == x && posy - 2 == y) {
+                                    game.movePlayer('B', currX + 2, currY - 2);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
-                            if (posy <= 16 && game.board[posx + 2][posy + 1] != 'W') {
-                                if (posx + 2 == x && posy + 1 == y) {
+                            if (posy <= 15 && game.board[posx + 2][posy + 1] != 'W') {
+                                if (posx + 2 == x && posy + 2 == y) {
                                     game.movePlayer('B', currX + 2, currY + 1);
                                     updateCurrent();
                                     return "ok";
                                 }
                             }
+                        } else if (posy <= 14 && posx + 4 == x && posy == y) {
+                            game.movePlayer('B', currX + 4, currY);
+                            updateCurrent();
+                            return "ok";
                         }
 
                     }
@@ -416,18 +445,19 @@ public class Play {
 
     void updateCurrent() {
         if (turnA) {
-            System.out.println("A turn.");
+            //System.out.println("A turn.");
 
             currX = game.posA.x;
             currY = game.posA.y;
             player = 'A';
         } else {
-            System.out.println("B turn.");
+//            System.out.println("B turn.");
             currX = game.posB.x;
             currY = game.posB.y;
             player = 'B';
         }
     }
+
     void updateTurn() {
         turnA = !turnA;
         turnB = !turnB;
@@ -454,7 +484,6 @@ public class Play {
 
         }
     }
-
 
     boolean goalState() {
         if (turnA) {
