@@ -10,7 +10,7 @@ public class Play {
     boolean turnA = false, turnB = false;
     char player, moveType, dir;
     int wallB = 10, wallA = 10;
-    int xa,xb,ya,yb;
+    int xa, xb, ya, yb;
 
     void showState() {
         for (int i = 0; i < 17; i++) {
@@ -22,12 +22,16 @@ public class Play {
         System.out.println("-----------------------------------------------------------------");
     }
 
-    void getMove() {
-        // random first player
+    void rand() {
         if (Math.random() > 0.5)
             turnA = true;
         else
             turnB = true;
+    }
+
+    void getMove() {
+
+        // random first player
 
         if (turnA) {
             System.out.println("A turn.");
@@ -134,27 +138,24 @@ public class Play {
         }
     }
 
-    void jumpMove(){
-        if (turnA){
+    void jumpMove() {
+        if (turnA) {
             xa = game.posA.x;
             ya = game.posA.y;
-            xb= game.posB.x;
-            yb=game.posB.y;
-            if (ya==yb && xa+2==xb && game.board[xa+1][ya]!='_') // b below a , no wall between them
+            xb = game.posB.x;
+            yb = game.posB.y;
+            if (ya == yb && xa + 2 == xb && game.board[xa + 1][ya] != '_') // b below a , no wall between them
             {
-                if (game.board[xb-1][yb]=='_') // wall below b
+                if (game.board[xb - 1][yb] == '_') // wall below b
                 {
 
-                }
-                else if (game.board[xb-1][yb]!='_') // nothing below b
+                } else if (game.board[xb - 1][yb] != '_') // nothing below b
                 {
-                    if (currX+4<17)
-                        game.movePlayer(player, currX+4, currY);
+                    if (currX + 4 < 17)
+                        game.movePlayer(player, currX + 4, currY);
                 }
             }
-        }
-        else
-        {
+        } else {
 
         }
     }
@@ -162,12 +163,12 @@ public class Play {
 
     boolean goalState() {
         if (turnA) {
-            if (game.posA.y == 16) {
+            if (game.posA.x == 16) {
                 System.out.println("player A is winner!");
                 return true;
             }
         } else if (turnB) {
-            if (game.posB.y == 0) {
+            if (game.posB.x == 0) {
                 System.out.println("player B is winner!");
                 return true;
             }
@@ -180,6 +181,7 @@ class Test {
     public static void main(String[] args) {
         Play play = new Play();
         boolean stop = false;
+        play.rand();
         while (!stop) {
             play.showState();
             play.getMove();
