@@ -324,7 +324,8 @@ public class Play {
         return (row >= 0) && (row < 17) && (col >= 0) && (col < 17);
     }
 
-    boolean BFS(char[][] board, Point src, Point dest) {
+    boolean
+    BFS(char[][] board, Point src, Point dest) {
         if (board[dest.x][dest.y] == 'W')
             return false;
 
