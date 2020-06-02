@@ -34,8 +34,10 @@ public class Main extends Application {
         root.setBackground(new Background(new BackgroundFill(Color.web("#EEDEC0"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         Button button = new Button("START");
-        button.setTranslateX(370);
-        button.setLayoutY(260);
+        button.setPrefHeight(35);
+        button.setPrefWidth(140);
+        button.setTranslateX(330);
+        button.setTranslateY(260);
         root.getChildren().add(button);
 
         warningText = new Text("warning");

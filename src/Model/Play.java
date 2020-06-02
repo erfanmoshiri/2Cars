@@ -24,7 +24,7 @@ public class Play {
         System.out.println("---------------------------------------------");
     }
 
-    // random first player
+    // defines random first player
     void rand() {
         if (Math.random() > 0.5)
             turnA = true;
