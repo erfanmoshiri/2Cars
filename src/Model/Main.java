@@ -20,9 +20,14 @@ public class Main extends Application {
     Text turnText;
     Text warningText;
     Text wallsNum;
-    Play play;
+    PlayWithFriend playWithFriend;
+    PlayWithAI playWithAI;
     int x1, y1, x2, y2;
     int count = 0;
+    Button friendButton;
+    Button AIButton;
+    Boolean playingWithAI = false;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -33,20 +38,35 @@ public class Main extends Application {
         root.setPrefSize(800, 600);
         root.setBackground(new Background(new BackgroundFill(Color.web("#EEDEC0"), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Button button = new Button("START");
-        button.setPrefHeight(35);
-        button.setPrefWidth(140);
-        button.setTranslateX(330);
-        button.setTranslateY(260);
-        root.getChildren().add(button);
+        friendButton = new Button("PLAY WITH A FRIEND");
+        friendButton.setPrefHeight(35);
+        friendButton.setPrefWidth(140);
+        friendButton.setTranslateX(330);
+        friendButton.setTranslateY(230);
+        root.getChildren().add(friendButton);
+
+        AIButton = new Button("PLAY WITH AI");
+        AIButton.setPrefHeight(35);
+        AIButton.setPrefWidth(140);
+        AIButton.setTranslateX(330);
+        AIButton.setTranslateY(270);
+        root.getChildren().add(AIButton);
 
         warningText = new Text("warning");
-        turnText = new Text("yours turn");
+        turnText = new Text("your`s turn");
         wallsNum = new Text("number of walls");
 
-        play = new Play();
 
-        button.setOnMouseClicked(mouseEvent -> {
+        friendButton.setOnMouseClicked(mouseEvent -> {
+            playWithFriend = new PlayWithFriend();
+            init(root);
+            startGame();
+
+        });
+
+        AIButton.setOnMouseClicked(mouseEvent -> {
+            playWithAI = new PlayWithAI();
+            playingWithAI = true;
             init(root);
             startGame();
 
@@ -55,7 +75,7 @@ public class Main extends Application {
     }
 
     void init(Pane root) {
-        root.setBackground(new Background(new BackgroundFill(Color.web("#F5D2D2"), CornerRadii.EMPTY, Insets.EMPTY)));
+        root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
         tiles = new Tile[17][17];
         for (int i = 0; i < 17; i++) {
             for (int j = 0; j < 17; j++) {
@@ -66,8 +86,8 @@ public class Main extends Application {
         for (int i = 0; i < 17; i++) {
             for (int j = 0; j < 17; j++) {
                 Tile tile = tiles[i][j];
-                tile.setTranslateX(x);
-                tile.setTranslateY(y);
+                tile.setTranslateX(20 + x);
+                tile.setTranslateY(35 + y);
                 root.getChildren().add(tile);
                 if (j % 2 == 0)
                     x += 50;
@@ -110,19 +130,36 @@ public class Main extends Application {
     }
 
     private void startGame() {
-        play.rand();
-        showTurn();
+        if (playingWithAI) {
+            playWithAI.rand();
+            showTurn();
+        } else {
+            playWithFriend.rand();
+            showTurn();
+        }
     }
 
     void showTurn() {
-        if (play.turnB) {
-            turnText.setText("It's B Turn");
-            wallsNum.setText("Remaining Walls: " + play.wallB);
+        if (playingWithAI) {
+            if (playWithAI.turnB) {
+                turnText.setText("It's B Turn");
+                wallsNum.setText("Remaining Walls: " + playWithAI.wallB);
+            } else {
+                turnText.setText("It's A Turn");
+                wallsNum.setText("Remaining Walls: " + playWithAI.wallA);
+            }
+            // show board state?
+
         } else {
-            turnText.setText("It's A Turn");
-            wallsNum.setText("Remaining Walls: " + play.wallA);
+            if (playWithFriend.turnB) {
+                turnText.setText("It's B Turn");
+                wallsNum.setText("Remaining Walls: " + playWithFriend.wallB);
+            } else {
+                turnText.setText("It's A Turn");
+                wallsNum.setText("Remaining Walls: " + playWithFriend.wallA);
+            }
+            playWithFriend.showBoardState();
         }
-        play.showState();
     }
 
     private class Tile extends StackPane {
@@ -148,7 +185,13 @@ public class Main extends Application {
 
             text = new Text();
             getChildren().addAll(boarder, text);
-            setOnMouseClicked(event -> played(i, j));
+
+            setOnMouseClicked(event -> {
+                if (!playingWithAI)
+                    firendPlayed(i, j);
+                else
+                    AIPlayed(i, j);
+            });
         }
 
         void setText(String s) {
@@ -156,7 +199,7 @@ public class Main extends Application {
         }
     }
 
-    void played(int i, int j) {
+    void firendPlayed(int i, int j) {
         if ((i % 2 == 1 || j % 2 == 1) && (i % 2 == 0 || j % 2 == 0)) {
             count++;
             if (count == 1) {
@@ -173,9 +216,9 @@ public class Main extends Application {
 
             if (count == 2) {
 
-                warningText.setText("pick ");
-                warn = play.puttingWall(x1, y1, x2, y2);
-                warningText.setText("pick 1");
+                //warningText.setText("pick ");
+                warn = playWithFriend.puttingWall(x1, y1, x2, y2);
+                //warningText.setText("pick 1");
                 if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls,only move")) {
                     warningText.setText(warn);
                     count = 0;
@@ -192,21 +235,21 @@ public class Main extends Application {
         } else if ((i % 2 == 0 && j % 2 == 0)) {
             int x, y;
             char c;
-            if (play.turnA) {
-                x = play.game.posA.x;
-                y = play.game.posA.y;
+            if (playWithFriend.turnA) {
+                x = playWithFriend.game.posA.x;
+                y = playWithFriend.game.posA.y;
                 c = 'A';
             } else {
-                x = play.game.posB.x;
-                y = play.game.posB.y;
+                x = playWithFriend.game.posB.x;
+                y = playWithFriend.game.posB.y;
                 c = 'B';
             }
-            String war = play.move(i, j);
+            String war = playWithFriend.move(i, j);
             if (war.equals("ok")) {
                 tiles[x][y].text.setText("");
                 tiles[i][j].text.setText(c + "");
-                if (play.goalState()) {
-                    if (play.turnA) {
+                if (playWithFriend.goalState()) {
+                    if (playWithFriend.turnA) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setContentText("PLAYER 'A' IS WINNER!");
                         alert.showAndWait();
@@ -218,7 +261,74 @@ public class Main extends Application {
                         exit();
                     }
                 } else {
-                    play.updateTurn();
+                    playWithFriend.updateTurn();
+                    showTurn();
+                }
+            } else if (war.equals("false")) {
+                warningText.setText("invalid Cell, have another go!");
+            }
+        }
+    }
+
+    void AIPlayed(int i, int j) {
+
+        if ((i % 2 == 1 || j % 2 == 1) && (i % 2 == 0 || j % 2 == 0) && playWithAI.turnB) {
+            count++;
+            if (count == 1) {
+                x1 = i;
+                y1 = j;
+                warningText.setText("Pick Second Wall");
+            } else {
+                x2 = i;
+                y2 = j;
+            }
+
+            System.out.println(i + ", " + j);
+            String warn = "";
+
+            if (count == 2) {
+
+                //warningText.setText("pick ");
+                warn = playWithAI.puttingWall(x1, y1, x2, y2);
+                //warningText.setText("pick 1");
+                if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls,only move")) {
+                    warningText.setText(warn);
+                    count = 0;
+                } else if (warn.equals("ok")) {
+                    warningText.setText("Wall Placed");
+                    System.out.println(x1 + ", " + y1);
+                    tiles[x1][y1].boarder.setFill(Color.BLACK);
+                    System.out.println(x2 + ", " + y2);
+                    tiles[x2][y2].boarder.setFill(Color.BLACK);
+                    count = 0;
+                }
+                showTurn();
+            }
+        } else if ((i % 2 == 0 && j % 2 == 0) && playWithAI.turnB) {
+            int x, y;
+            char c;
+            x = playWithAI.game.posB.x;
+            y = playWithAI.game.posB.y;
+            c = 'B';
+
+            String war = playWithAI.move(i, j);
+            if (war.equals("ok")) {
+                tiles[x][y].text.setText("");
+                tiles[i][j].text.setText(c + "");
+                if (playWithAI.goalState()) {
+                    if (playWithAI.turnA) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setContentText("PLAYER 'A' IS WINNER!");
+                        alert.showAndWait();
+                        exit();
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setContentText("PLAYER 'B' IS WINNER!");
+                        alert.showAndWait();
+                        exit();
+                    }
+                } else {
+                    playWithAI.updateTurn();
                     showTurn();
                 }
             } else if (war.equals("false")) {

@@ -4,7 +4,8 @@ import java.util.LinkedList;
 
 import static java.lang.StrictMath.abs;
 
-public class Play {
+public class PlayWithAI {
+
     Board game = new Board();
     Board path = new Board();
     int currX, currY;
@@ -14,17 +15,6 @@ public class Play {
     int rowNum[] = {-1, 0, 0, 1};
     int colNum[] = {0, -1, 1, 0};
 
-    void showState() {
-        for (int i = 0; i < 17; i++) {
-            for (int j = 0; j < 17; j++) {
-                System.out.print(game.board[i][j] + "  ");
-            }
-            System.out.println("");
-        }
-        System.out.println("---------------------------------------------");
-    }
-
-    // defines random first player
     void rand() {
         if (Math.random() > 0.5)
             turnA = true;
@@ -73,7 +63,6 @@ public class Play {
         updateTurn();
         return "ok";
     }
-
     String move(int x, int y) {
         updateCurrent();
 
@@ -84,7 +73,6 @@ public class Play {
                         if ((currX == x) && (currY - 2 == y)) {
                             game.movePlayer('A', currX, currY - 2);
                             path.movePlayer('A', currX, currY - 2);
-                            System.out.println("Moved");
                             return "ok";
                         }
                     } else {
@@ -320,12 +308,44 @@ public class Play {
         return "false";
     }
 
-    boolean isValid(int row, int col) {
-        return (row >= 0) && (row < 17) && (col >= 0) && (col < 17);
+
+    void updateTurn() {
+        turnA = !turnA;
+        turnB = !turnB;
     }
 
-    boolean
-    BFS(char[][] board, Point src, Point dest) {
+    void updateCurrent() {
+        if (turnA) {
+            currX = game.posA.x;
+            currY = game.posA.y;
+            player = 'A';
+        } else {
+            currX = game.posB.x;
+            currY = game.posB.y;
+            player = 'B';
+        }
+    }
+
+    boolean hasPath(Board path) {
+        boolean pathA = false, pathB = false;
+        Point pointA = new Point(path.posA.x, path.posA.y);
+        Point pointB = new Point(path.posB.x, path.posB.y);
+
+        for (int i = 0; i < 9; i++) { // open path for A
+            Point dest = new Point(16, i * 2);
+            if (BFS(path.board, pointA, dest))
+                pathA = true;
+        }
+
+        for (int i = 0; i < 9; i++) { // open path for B
+            Point dest = new Point(0, i * 2);
+            if (BFS(path.board, pointB, dest))
+                pathB = true;
+        }
+        return pathA && pathB;
+    }
+
+    boolean BFS(char[][] board, Point src, Point dest) {
         if (board[dest.x][dest.y] == 'W')
             return false;
 
@@ -357,42 +377,10 @@ public class Play {
         }
         return false;
     }
-
-    boolean hasPath(Board path) {
-        boolean pathA = false, pathB = false;
-        Point pointA = new Point(path.posA.x, path.posA.y);
-        Point pointB = new Point(path.posB.x, path.posB.y);
-
-        for (int i = 0; i < 9; i++) { // open path for A
-            Point dest = new Point(16, i * 2);
-            if (BFS(path.board, pointA, dest))
-                pathA = true;
-        }
-
-        for (int i = 0; i < 9; i++) { // open path for B
-            Point dest = new Point(0, i * 2);
-            if (BFS(path.board, pointB, dest))
-                pathB = true;
-        }
-        return pathA && pathB;
+    boolean isValid(int row, int col) {
+        return (row >= 0) && (row < 17) && (col >= 0) && (col < 17);
     }
 
-    void updateCurrent() {
-        if (turnA) {
-            currX = game.posA.x;
-            currY = game.posA.y;
-            player = 'A';
-        } else {
-            currX = game.posB.x;
-            currY = game.posB.y;
-            player = 'B';
-        }
-    }
-
-    void updateTurn() {
-        turnA = !turnA;
-        turnB = !turnB;
-    }
 
     boolean goalState() {
         if (turnA) {
