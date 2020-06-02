@@ -321,50 +321,50 @@ public class PlayWithFriend {
         return "false";
     }
 
-    boolean isValid(int row, int col) {
-        return (row >= 0) && (row < 17) && (col >= 0) && (col < 17);
-    }
-
-    boolean BFS(char[][] board, Point src, Point dest) {
-        if (board[dest.x][dest.y] == 'W')
-            return false;
-
-        boolean[][] visited = new boolean[17][17];
-
-        visited[src.x][src.y] = true;
-
-        LinkedList<Point> queue = new LinkedList<Point>();
-
-        queue.push(src);
-
-        int row, col;
-        while (!queue.isEmpty()) {
-            Point pt = queue.peek();
-            if (pt.x == dest.x && pt.y == dest.y) // reach end line
-                return true;
-
-            queue.pop();
-
-            for (int i = 0; i < 4; i++) {
-                row = pt.x + rowNum[i];
-                col = pt.y + colNum[i];
-                if (isValid(row, col) && board[row][col] != 'W' && !visited[row][col]) {
-                    visited[row][col] = true;
-                    Point prvPoint = new Point(row, col);
-                    queue.push(prvPoint);
-                }
-            }
-        }
-        return false;
-    }
+//    boolean isValid(int row, int col) {
+//        return (row >= 0) && (row < 17) && (col >= 0) && (col < 17);
+//    }
+//
+//    boolean BFS(char[][] board, Point src, Point dest) {
+//        if (board[dest.x][dest.y] == 'W')
+//            return false;
+//
+//        boolean[][] visited = new boolean[17][17];
+//
+//        visited[src.x][src.y] = true;
+//
+//        LinkedList<Point> queue = new LinkedList<Point>();
+//
+//        queue.push(src);
+//
+//        int row, col;
+//        while (!queue.isEmpty()) {
+//            Point pt = queue.peek();
+//            if (pt.x == dest.x && pt.y == dest.y) // reach end line
+//                return true;
+//
+//            queue.pop();
+//
+//            for (int i = 0; i < 4; i++) {
+//                row = pt.x + rowNum[i];
+//                col = pt.y + colNum[i];
+//                if (isValid(row, col) && board[row][col] != 'W' && !visited[row][col]) {
+//                    visited[row][col] = true;
+//                    Point prvPoint = new Point(row, col);
+//                    queue.push(prvPoint);
+//                }
+//            }
+//        }
+//        return false;
+//    }
 
     boolean hasPath(Board path) {
         boolean pathA = false, pathB = false;
         Point pointA = new Point(path.posA.x, path.posA.y);
         Point pointB = new Point(path.posB.x, path.posB.y);
 
-        pathA = pathFinder.BFS(pointA, 16, path.board);
-        pathB = pathFinder.BFS(pointB, 0, path.board);
+        pathA = pathFinder.BFS(pointA, 16, path.board, turnA);
+        pathB = pathFinder.BFS(pointB, 0, path.board, turnB);
 
 //        for (int i = 0; i < 9; i++) { // open path for A
 //            Point dest = new Point(16, i * 2);
