@@ -149,6 +149,7 @@ public class PlayWithFriend {
                     if (game.board[currX - 2][currY] != 'B') {
                         if ((currX - 2 == x) && (currY == y)) {
                             game.movePlayer('A', currX - 2, currY);
+                            path.movePlayer('A', currX - 2, currY);
                             return "ok";
                         }
                     } else {
@@ -156,17 +157,20 @@ public class PlayWithFriend {
                             if (currY >= 2 && game.board[currX - 2][currY - 1] != 'W') {
                                 if (currX - 2 == x && currY - 2 == y) {
                                     game.movePlayer('A', currX - 2, currY - 2);
+                                    path.movePlayer('A', currX - 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX - 2][currY + 1] != 'W') {
                                 if (currX - 2 == x && currY + 2 == y) {
                                     game.movePlayer('A', currX - 2, currY + 2);
+                                    path.movePlayer('A', currX - 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currX >= 4 && currX - 4 == x && currY == y) {
                             game.movePlayer('A', currX - 4, currY);
+                            path.movePlayer('A', currX - 4, currY);
                             return "ok";
                         }
                     }
@@ -177,6 +181,7 @@ public class PlayWithFriend {
                     if (game.board[currX + 2][currY] != 'B') {
                         if ((currX + 2 == x) && (currY == y)) {
                             game.movePlayer('A', currX + 2, currY);
+                            path.movePlayer('A', currX + 2, currY);
                             return "ok";
                         }
                     } else {
@@ -184,17 +189,20 @@ public class PlayWithFriend {
                             if (currY >= 2 && game.board[currX + 2][currY - 1] != 'W') {
                                 if (currX + 2 == x && currY - 2 == y) {
                                     game.movePlayer('A', currX + 2, currY - 2);
+                                    path.movePlayer('A', currX + 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX + 2][currY + 1] != 'W') {
                                 if (currX + 2 == x && currY + 2 == y) {
                                     game.movePlayer('A', currX + 2, currY + 2);
+                                    path.movePlayer('A', currX + 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY <= 14 && currX + 4 == x && currY == y) {
                             game.movePlayer('A', currX + 4, currY);
+                            path.movePlayer('A', currX + 4, currY);
                             return "ok";
                         }
                     }
@@ -209,6 +217,7 @@ public class PlayWithFriend {
                     if (game.board[currX][currY - 2] != 'A') {
                         if ((currX == x) && (currY - 2 == y)) {
                             game.movePlayer('B', currX, currY - 2);
+                            path.movePlayer('B', currX, currY - 2);
                             return "ok";
                         }
                     } else {
@@ -216,17 +225,20 @@ public class PlayWithFriend {
                             if (currX >= 2 && game.board[currX - 1][currY - 2] != 'W') {
                                 if (currX - 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX - 2, currY - 2);
+                                    path.movePlayer('B', currX - 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currX <= 15 && game.board[currX + 1][currY - 2] != 'W') {
                                 if (currX + 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX + 2, currY - 2);
+                                    path.movePlayer('B', currX + 2, currY - 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY >= 4 && currY - 4 == y && currX == x) {
                             game.movePlayer('B', currX, currY - 4);
+                            path.movePlayer('B', currX, currY - 4);
                             return "ok";
                         }
                     }
@@ -237,6 +249,7 @@ public class PlayWithFriend {
                     if (game.board[currX][currY + 2] != 'A') {
                         if ((currX == x) && (currY + 2 == y)) {
                             game.movePlayer('B', currX, currY + 2);
+                            path.movePlayer('B', currX, currY + 2);
                             return "ok";
                         }
                     } else {
@@ -244,17 +257,20 @@ public class PlayWithFriend {
                             if (currX >= 2 && game.board[currX - 1][currY + 2] != 'W') {
                                 if (currX - 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX - 2, currY + 2);
+                                    path.movePlayer('B', currX - 2, currY + 2);
                                     return "ok";
                                 }
                             }
                             if (currX <= 15 && game.board[currX + 1][currY + 2] != 'W') {
                                 if (currX + 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX + 2, currY + 2);
+                                    path.movePlayer('B', currX + 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY <= 13 && currY + 4 == y && currX == x) {
                             game.movePlayer('B', currX, currY + 4);
+                            path.movePlayer('B', currX, currY + 4);
                             return "ok";
                         }
                     }
@@ -265,6 +281,7 @@ public class PlayWithFriend {
                     if (game.board[currX - 2][currY] != 'A') {
                         if ((currX - 2 == x) && (currY == y)) {
                             game.movePlayer('B', currX - 2, currY);
+                            path.movePlayer('B', currX - 2, currY);
                             return "ok";
                         }
                     } else {
@@ -272,17 +289,20 @@ public class PlayWithFriend {
                             if (currY >= 2 && game.board[currX - 2][currY - 1] != 'W') {
                                 if (currX - 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX - 2, currY - 2);
+                                    path.movePlayer('B', currX - 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX - 2][currY + 1] != 'W') {
                                 if (currX - 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX - 2, currY + 2);
+                                    path.movePlayer('B', currX - 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currX >= 4 && currX - 4 == x && currY == y) {
                             game.movePlayer('B', currX - 4, currY);
+                            path.movePlayer('B', currX - 4, currY);
                             return "ok";
                         }
                     }
@@ -293,6 +313,7 @@ public class PlayWithFriend {
                     if (game.board[currX + 2][currY] != 'A') {
                         if ((currX + 2 == x) && (currY == y)) {
                             game.movePlayer('B', currX + 2, currY);
+                            path.movePlayer('B', currX + 2, currY);
                             return "ok";
                         }
                     } else {
@@ -300,17 +321,20 @@ public class PlayWithFriend {
                             if (currY >= 2 && game.board[currX + 2][currY - 1] != 'W') {
                                 if (currX + 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX + 2, currY - 2);
+                                    path.movePlayer('B', currX + 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX + 2][currY + 1] != 'W') {
                                 if (currX + 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX + 2, currY + 2);
+                                    path.movePlayer('B', currX + 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY <= 14 && currX + 4 == x && currY == y) {
                             game.movePlayer('B', currX + 4, currY);
+                            path.movePlayer('B', currX + 4, currY);
                             return "ok";
                         }
                     }
@@ -363,8 +387,10 @@ public class PlayWithFriend {
         Point pointA = new Point(path.posA.x, path.posA.y);
         Point pointB = new Point(path.posB.x, path.posB.y);
 
-        pathA = pathFinder.BFS(pointA, 16, path.board, turnA);
-        pathB = pathFinder.BFS(pointB, 0, path.board, turnB);
+        if(pathFinder.BFS(pointA, 16, path.board, turnA) != null)
+            pathA = true;
+        if(pathFinder.BFS(pointB, 0, path.board, turnB) != null)
+            pathB = true;
 
 //        for (int i = 0; i < 9; i++) { // open path for A
 //            Point dest = new Point(16, i * 2);
