@@ -211,7 +211,7 @@ public class Main extends Application {
                 y2 = j;
             }
 
-            System.out.println(i + ", " + j);
+            //System.out.println(i + ", " + j);
             String warn = "";
 
             if (count == 2) {
@@ -224,9 +224,9 @@ public class Main extends Application {
                     count = 0;
                 } else if (warn.equals("ok")) {
                     warningText.setText("Wall Placed");
-                    System.out.println(x1 + ", " + y1);
+                    //System.out.println(x1 + ", " + y1);
                     tiles[x1][y1].boarder.setFill(Color.BLACK);
-                    System.out.println(x2 + ", " + y2);
+                    //System.out.println(x2 + ", " + y2);
                     tiles[x2][y2].boarder.setFill(Color.BLACK);
                     count = 0;
                 }
@@ -283,7 +283,7 @@ public class Main extends Application {
                 y2 = j;
             }
 
-            System.out.println(i + ", " + j);
+            //System.out.println(i + ", " + j);
             String warn = "";
 
             if (count == 2) {
@@ -296,9 +296,9 @@ public class Main extends Application {
                     count = 0;
                 } else if (warn.equals("ok")) {
                     warningText.setText("Wall Placed");
-                    System.out.println(x1 + ", " + y1);
+                    //System.out.println(x1 + ", " + y1);
                     tiles[x1][y1].boarder.setFill(Color.BLACK);
-                    System.out.println(x2 + ", " + y2);
+                    //System.out.println(x2 + ", " + y2);
                     tiles[x2][y2].boarder.setFill(Color.BLACK);
                     count = 0;
                 }

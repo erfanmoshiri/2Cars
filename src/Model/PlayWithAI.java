@@ -136,6 +136,7 @@ public class PlayWithAI {
                     if (game.board[currX - 2][currY] != 'B') {
                         if ((currX - 2 == x) && (currY == y)) {
                             game.movePlayer('A', currX - 2, currY);
+                            path.movePlayer('A', currX - 2, currY);
                             return "ok";
                         }
                     } else {
@@ -143,17 +144,20 @@ public class PlayWithAI {
                             if (currY >= 2 && game.board[currX - 2][currY - 1] != 'W') {
                                 if (currX - 2 == x && currY - 2 == y) {
                                     game.movePlayer('A', currX - 2, currY - 2);
+                                    path.movePlayer('A', currX - 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX - 2][currY + 1] != 'W') {
                                 if (currX - 2 == x && currY + 2 == y) {
                                     game.movePlayer('A', currX - 2, currY + 2);
+                                    path.movePlayer('A', currX - 2, currY + 2);
                                     return "ok";
                                 }
                             }
-                        } else if (currY >= 4 && currX - 4 == x && currY == y) {
+                        } else if (currX >= 4 && currX - 4 == x && currY == y) {
                             game.movePlayer('A', currX - 4, currY);
+                            path.movePlayer('A', currX - 4, currY);
                             return "ok";
                         }
                     }
@@ -164,24 +168,28 @@ public class PlayWithAI {
                     if (game.board[currX + 2][currY] != 'B') {
                         if ((currX + 2 == x) && (currY == y)) {
                             game.movePlayer('A', currX + 2, currY);
+                            path.movePlayer('A', currX + 2, currY);
                             return "ok";
                         }
                     } else {
-                        if (currX <= 14 && game.board[currX + 3][currY] == 'W') {
+                        if (currX <= 13 && game.board[currX + 3][currY] == 'W') {
                             if (currY >= 2 && game.board[currX + 2][currY - 1] != 'W') {
                                 if (currX + 2 == x && currY - 2 == y) {
                                     game.movePlayer('A', currX + 2, currY - 2);
+                                    path.movePlayer('A', currX + 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX + 2][currY + 1] != 'W') {
                                 if (currX + 2 == x && currY + 2 == y) {
                                     game.movePlayer('A', currX + 2, currY + 2);
+                                    path.movePlayer('A', currX + 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY <= 14 && currX + 4 == x && currY == y) {
                             game.movePlayer('A', currX + 4, currY);
+                            path.movePlayer('A', currX + 4, currY);
                             return "ok";
                         }
                     }
@@ -196,6 +204,7 @@ public class PlayWithAI {
                     if (game.board[currX][currY - 2] != 'A') {
                         if ((currX == x) && (currY - 2 == y)) {
                             game.movePlayer('B', currX, currY - 2);
+                            path.movePlayer('B', currX, currY - 2);
                             return "ok";
                         }
                     } else {
@@ -203,17 +212,20 @@ public class PlayWithAI {
                             if (currX >= 2 && game.board[currX - 1][currY - 2] != 'W') {
                                 if (currX - 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX - 2, currY - 2);
+                                    path.movePlayer('B', currX - 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currX <= 15 && game.board[currX + 1][currY - 2] != 'W') {
                                 if (currX + 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX + 2, currY - 2);
+                                    path.movePlayer('B', currX + 2, currY - 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY >= 4 && currY - 4 == y && currX == x) {
                             game.movePlayer('B', currX, currY - 4);
+                            path.movePlayer('B', currX, currY - 4);
                             return "ok";
                         }
                     }
@@ -224,6 +236,7 @@ public class PlayWithAI {
                     if (game.board[currX][currY + 2] != 'A') {
                         if ((currX == x) && (currY + 2 == y)) {
                             game.movePlayer('B', currX, currY + 2);
+                            path.movePlayer('B', currX, currY + 2);
                             return "ok";
                         }
                     } else {
@@ -231,17 +244,20 @@ public class PlayWithAI {
                             if (currX >= 2 && game.board[currX - 1][currY + 2] != 'W') {
                                 if (currX - 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX - 2, currY + 2);
+                                    path.movePlayer('B', currX - 2, currY + 2);
                                     return "ok";
                                 }
                             }
                             if (currX <= 15 && game.board[currX + 1][currY + 2] != 'W') {
                                 if (currX + 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX + 2, currY + 2);
+                                    path.movePlayer('B', currX + 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY <= 13 && currY + 4 == y && currX == x) {
                             game.movePlayer('B', currX, currY + 4);
+                            path.movePlayer('B', currX, currY + 4);
                             return "ok";
                         }
                     }
@@ -252,6 +268,7 @@ public class PlayWithAI {
                     if (game.board[currX - 2][currY] != 'A') {
                         if ((currX - 2 == x) && (currY == y)) {
                             game.movePlayer('B', currX - 2, currY);
+                            path.movePlayer('B', currX - 2, currY);
                             return "ok";
                         }
                     } else {
@@ -259,17 +276,20 @@ public class PlayWithAI {
                             if (currY >= 2 && game.board[currX - 2][currY - 1] != 'W') {
                                 if (currX - 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX - 2, currY - 2);
+                                    path.movePlayer('B', currX - 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX - 2][currY + 1] != 'W') {
                                 if (currX - 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX - 2, currY + 2);
+                                    path.movePlayer('B', currX - 2, currY + 2);
                                     return "ok";
                                 }
                             }
-                        } else if (currY >= 4 && currX - 4 == x && currY == y) {
+                        } else if (currX >= 4 && currX - 4 == x && currY == y) {
                             game.movePlayer('B', currX - 4, currY);
+                            path.movePlayer('B', currX - 4, currY);
                             return "ok";
                         }
                     }
@@ -280,24 +300,28 @@ public class PlayWithAI {
                     if (game.board[currX + 2][currY] != 'A') {
                         if ((currX + 2 == x) && (currY == y)) {
                             game.movePlayer('B', currX + 2, currY);
+                            path.movePlayer('B', currX + 2, currY);
                             return "ok";
                         }
                     } else {
-                        if (currX <= 14 && game.board[currX + 3][currY] == 'W') {
+                        if (currX <= 13 && game.board[currX + 3][currY] == 'W') {
                             if (currY >= 2 && game.board[currX + 2][currY - 1] != 'W') {
                                 if (currX + 2 == x && currY - 2 == y) {
                                     game.movePlayer('B', currX + 2, currY - 2);
+                                    path.movePlayer('B', currX + 2, currY - 2);
                                     return "ok";
                                 }
                             }
                             if (currY <= 15 && game.board[currX + 2][currY + 1] != 'W') {
                                 if (currX + 2 == x && currY + 2 == y) {
                                     game.movePlayer('B', currX + 2, currY + 2);
+                                    path.movePlayer('B', currX + 2, currY + 2);
                                     return "ok";
                                 }
                             }
                         } else if (currY <= 14 && currX + 4 == x && currY == y) {
                             game.movePlayer('B', currX + 4, currY);
+                            path.movePlayer('B', currX + 4, currY);
                             return "ok";
                         }
                     }
