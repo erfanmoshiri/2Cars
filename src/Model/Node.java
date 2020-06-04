@@ -101,6 +101,8 @@ class miniMAx {
                             }
                         }
                     }
+                } else {
+                    // sade sazii
                 }
             }
 
@@ -142,6 +144,8 @@ class miniMAx {
                             }
                         }
                     }
+                } else {
+                    // sade sazii
                 }
             }
         }
