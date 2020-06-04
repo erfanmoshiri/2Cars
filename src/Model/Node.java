@@ -12,18 +12,22 @@ public class Node {
     Pos posB;
     Board board;
     Pos wall1 = null;
-    Pos wall2 = null;
+    Pos wall2 = null; // badan befahmim divar ezafe shode ya player jabeja shode
 
 
     public Node(Board board) {
-//        this.wallA = wallA;
-//        this.wallB = wallB;
-//        this.posA = posA;
-//        this.posB = posB;
         this.board = board;
     }
 
-//    @Override
+    public Node(int wallA, int wallB, Pos posA, Pos posB, Board board) {
+        this.wallA = wallA;
+        this.wallB = wallB;
+        this.posA = posA;
+        this.posB = posB;
+        this.board = board;
+    }
+
+    //    @Override
 //    public int compareTo(Object n) {
 //        Node node = (Node) n;
 //        if (this.h >= node.h)
@@ -63,12 +67,9 @@ class miniMAx {
 
         if (isMaxTurn) { // AI
             pq = new PriorityQueue<>(new MaxComperator());
-            for (int i = 0; i < 4; i++) {
-                Node n1 = new Node(node.board);
-                n1.board.movePlayer('A', n1.board.posA.x + rowNum[i], n1.board.posA.y + colNum[i]);
-                pq.add(n1);
-            }
-            // agar harekate movarab dasht
+
+
+
 
             for (int j=1 ; j<16 ; j+=2) // horizontal wall
             {
@@ -76,6 +77,7 @@ class miniMAx {
                 {
                     Node n1 = new Node(node.board);
                     n1.board.putWall(j,k,j,k+2);
+
                     pq.add(n1);
                 }
             }
