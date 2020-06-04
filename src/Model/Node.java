@@ -15,11 +15,11 @@ public class Node {
     Pos wall2 = null;
 
 
-    public Node(int wallA, int wallB, Pos posA, Pos posB, Board board) {
-        this.wallA = wallA;
-        this.wallB = wallB;
-        this.posA = posA;
-        this.posB = posB;
+    public Node(Board board) {
+//        this.wallA = wallA;
+//        this.wallB = wallB;
+//        this.posA = posA;
+//        this.posB = posB;
         this.board = board;
     }
 
@@ -33,6 +33,9 @@ public class Node {
 }
 
 class miniMAx {
+
+    int rowNum[] = {-2, 0, 0, 2};
+    int colNum[] = {0, -2, 2, 0};
 
     Node miniMaxAlphaBeta(Node node, int level, int depth, boolean isMaxTurn, int alpha, int beta) {
 
@@ -58,12 +61,65 @@ class miniMAx {
 
         PriorityQueue<Node> pq;
 
-        if (isMaxTurn) {
+        if (isMaxTurn) { // AI
             pq = new PriorityQueue<>(new MaxComperator());
-        } else {
-            pq = new PriorityQueue<>(new MinComperator());
-        }
+            for (int i = 0; i < 4; i++) {
+                Node n1 = new Node(node.board);
+                n1.board.movePlayer('A', n1.board.posA.x + rowNum[i], n1.board.posA.y + colNum[i]);
+                pq.add(n1);
+            }
+            // agar harekate movarab dasht
 
+            for (int j=1 ; j<16 ; j+=2) // horizontal wall
+            {
+                for (int k=0 ; k<15 ; k+=2)
+                {
+                    Node n1 = new Node(node.board);
+                    n1.board.putWall(j,k,j,k+2);
+                    pq.add(n1);
+                }
+            }
+
+            for (int j=0 ; j<17 ; j+=2) // vertical wall
+            {
+                for (int k=1 ; k<15 ; k+=2)
+                {
+                    Node n1 = new Node(node.board);
+                    n1.board.putWall(j,k,j+2,k);
+                    pq.add(n1);
+                }
+            }
+
+
+        } else { // Human
+            pq = new PriorityQueue<>(new MinComperator());
+            for (int i = 0; i < 4; i++) {
+                node.board.movePlayer('B', node.board.posA.x + rowNum[i], node.board.posA.y + colNum[i]);
+                pq.add(node);
+            }
+
+            // agar harekate movarab dasht
+
+            for (int j=1 ; j<16 ; j+=2) // horizontal wall
+            {
+                for (int k=0 ; k<15 ; k+=2)
+                {
+                    Node n1 = new Node(node.board);
+                    n1.board.putWall(j,k,j,k+2);
+                    pq.add(n1);
+                }
+            }
+
+            for (int j=0 ; j<17 ; j+=2) // vertical wall
+            {
+                for (int k=1 ; k<15 ; k+=2)
+                {
+                    Node n1 = new Node(node.board);
+                    n1.board.putWall(j,k,j+2,k);
+                    pq.add(n1);
+                }
+            }
+        }
 
         return pq;
     }
@@ -74,7 +130,7 @@ class MaxComperator implements Comparator<Node> {
     public int compare(Node n1, Node n2) {
         if (n1.h > n2.h)
             return 1;
-        if(n1.h == n2.h)
+        if (n1.h == n2.h)
             return 0;
         return -1;
     }
@@ -84,7 +140,7 @@ class MinComperator implements Comparator<Node> {
     public int compare(Node n1, Node n2) {
         if (n1.h > n2.h)
             return -1;
-        if(n1.h == n2.h)
+        if (n1.h == n2.h)
             return 0;
         return 1;
     }

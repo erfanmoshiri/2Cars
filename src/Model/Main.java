@@ -188,7 +188,7 @@ public class Main extends Application {
 
             setOnMouseClicked(event -> {
                 if (!playingWithAI)
-                    firendPlayed(i, j);
+                    friendPlayed(i, j);
                 else
                     AIPlayed(i, j);
             });
@@ -199,7 +199,7 @@ public class Main extends Application {
         }
     }
 
-    void firendPlayed(int i, int j) {
+    void friendPlayed(int i, int j) {
         if ((i % 2 == 1 || j % 2 == 1) && (i % 2 == 0 || j % 2 == 0)) {
             count++;
             if (count == 1) {
