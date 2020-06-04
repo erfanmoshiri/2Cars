@@ -2,42 +2,39 @@ package Model;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Node {
 
-    int h;
+    int hA;
+    int hB;
+    int huristic;
     int wallA;
     int wallB;
-    Pos posA;
-    Pos posB;
     Board board;
-    Pos wall1 = null;
-    Pos wall2 = null; // badan befahmim divar ezafe shode ya player jabeja shode
+    Point wall1 = null;
+    Point wall2 = null; // badan befahmim divar ezafe shode ya player jabeja shode
 
 
     public Node(Board board) {
         this.board = board;
     }
 
-    public Node(int wallA, int wallB, Pos posA, Pos posB, Board board) {
+    public Node(int wallA, int wallB, Board board) {
         this.wallA = wallA;
         this.wallB = wallB;
-        this.posA = posA;
-        this.posB = posB;
         this.board = board;
     }
 
-    //    @Override
-//    public int compareTo(Object n) {
-//        Node node = (Node) n;
-//        if (this.h >= node.h)
-//            return 1;
-//        return -1;
-//    }
+    void calculateHuristic() {
+        this.huristic = this.hA - this.hB + this.wallA - this.wallB;
+    }
+
 }
 
 class miniMAx {
 
+    PathFinder pathFinder = new PathFinder();
     int rowNum[] = {-2, 0, 0, 2};
     int colNum[] = {0, -2, 2, 0};
 
@@ -50,7 +47,7 @@ class miniMAx {
         if (isMaxTurn) {
 
             int best = -1 * Integer.MAX_VALUE;
-            PriorityQueue<Node> pq = childGenerator(node, isMaxTurn, level);
+            PriorityQueue<Node> pq = childGenerator(node, isMaxTurn, level, depth);
 
 
         } else {
@@ -61,64 +58,90 @@ class miniMAx {
         return null;
     }
 
-    private PriorityQueue<Node> childGenerator(Node node, boolean isMaxTurn, int level) {
+    PriorityQueue<Node> childGenerator(Node node, boolean isMaxTurn, int level, int depth) {
 
         PriorityQueue<Node> pq;
+        Queue<Node> nodes;
+        Node n, n1, n2;
 
         if (isMaxTurn) { // AI
+
             pq = new PriorityQueue<>(new MaxComperator());
-
-
-
-
-            for (int j=1 ; j<16 ; j+=2) // horizontal wall
-            {
-                for (int k=0 ; k<15 ; k+=2)
-                {
-                    Node n1 = new Node(node.board);
-                    n1.board.putWall(j,k,j,k+2);
-
-                    pq.add(n1);
-                }
+            n = new Node(node.wallA, node.wallB, node.board);
+            nodes = pathFinder.movePlayer(n, 'A');
+            while (!nodes.isEmpty()) {
+                n1 = nodes.poll();
+                n1.hA = pathFinder.BFS(n1.board.posA, 16, n1.board.board, true).counter;
+                n1.hB = pathFinder.BFS(n1.board.posB, 0, n1.board.board, false).counter;
+                n1.calculateHuristic();
+                pq.add(n1);
             }
 
-            for (int j=0 ; j<17 ; j+=2) // vertical wall
-            {
-                for (int k=1 ; k<15 ; k+=2)
-                {
-                    Node n1 = new Node(node.board);
-                    n1.board.putWall(j,k,j+2,k);
-                    pq.add(n1);
+            if (node.wallA != 0) {
+
+
+                if (level == 1) {
+
+                    for (int j = 1; j < 16; j += 2) // horizontal wall
+                    {
+                        for (int k = 0; k < 15; k += 2) {
+                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, true);
+                            if (n2 != null) {
+                                pq.add(n2);
+                            }
+                        }
+                    }
+
+                    for (int j = 0; j < 17; j += 2) // vertical wall
+                    {
+                        for (int k = 1; k < 15; k += 2) {
+                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, true);
+                            if (n2 != null) {
+                                pq.add(n2);
+                            }
+                        }
+                    }
                 }
             }
 
 
         } else { // Human
+
             pq = new PriorityQueue<>(new MinComperator());
-            for (int i = 0; i < 4; i++) {
-                node.board.movePlayer('B', node.board.posA.x + rowNum[i], node.board.posA.y + colNum[i]);
-                pq.add(node);
+            n = new Node(node.wallA, node.wallB, node.board);
+            nodes = pathFinder.movePlayer(n, 'B');
+            while (!nodes.isEmpty()) {
+                n1 = nodes.poll();
+                n1.hA = pathFinder.BFS(n1.board.posA, 16, n1.board.board, true).counter;
+                n1.hB = pathFinder.BFS(n1.board.posB, 0, n1.board.board, false).counter;
+                n1.calculateHuristic();
+                pq.add(n1);
             }
 
-            // agar harekate movarab dasht
+            if (node.wallB != 0) {
 
-            for (int j=1 ; j<16 ; j+=2) // horizontal wall
-            {
-                for (int k=0 ; k<15 ; k+=2)
-                {
-                    Node n1 = new Node(node.board);
-                    n1.board.putWall(j,k,j,k+2);
-                    pq.add(n1);
-                }
-            }
 
-            for (int j=0 ; j<17 ; j+=2) // vertical wall
-            {
-                for (int k=1 ; k<15 ; k+=2)
-                {
-                    Node n1 = new Node(node.board);
-                    n1.board.putWall(j,k,j+2,k);
-                    pq.add(n1);
+                if (level == 1) {
+
+                    for (int j = 1; j < 16; j += 2) // horizontal wall
+                    {
+                        for (int k = 0; k < 15; k += 2) {
+                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, false);
+                            if (n2 != null) {
+                                pq.add(n2);
+                            }
+                        }
+                    }
+
+                    for (int j = 0; j < 17; j += 2) // vertical wall
+                    {
+                        for (int k = 1; k < 15; k += 2) {
+                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, false);
+                            if (n2 != null) {
+                                pq.add(n2);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -130,9 +153,9 @@ class miniMAx {
 class MaxComperator implements Comparator<Node> {
 
     public int compare(Node n1, Node n2) {
-        if (n1.h > n2.h)
+        if (n1.huristic > n2.huristic)
             return 1;
-        if (n1.h == n2.h)
+        if (n1.huristic == n2.huristic)
             return 0;
         return -1;
     }
@@ -140,10 +163,11 @@ class MaxComperator implements Comparator<Node> {
 
 class MinComperator implements Comparator<Node> {
     public int compare(Node n1, Node n2) {
-        if (n1.h > n2.h)
+        if (n1.huristic > n2.huristic)
             return -1;
-        if (n1.h == n2.h)
+        if (n1.huristic == n2.huristic)
             return 0;
         return 1;
+
     }
 }
