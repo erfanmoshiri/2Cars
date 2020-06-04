@@ -18,7 +18,6 @@ public class PathFinder {
 
         visited[src.x][src.y] = true;
 
-        System.out.println("src : " + src.x + " , " + src.y);
         Pos pos = new Pos(src, 0, null);
 
         queue.add(pos);

@@ -420,4 +420,16 @@ public class PlayWithAI {
         }
         return false;
     }
+
+    public static void main(String[] args) {
+        int[][] ar = new int[17][17];
+        int x = 129;
+        for (int i = 0; i < 1000000; i++) {
+            //System.out.println(i);
+            int[][] ar1 = new int[17][17];
+            ar1 = ar.clone();
+        }
+        System.out.println("DONE");
+
+    }
 }
