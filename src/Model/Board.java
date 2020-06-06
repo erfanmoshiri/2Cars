@@ -19,6 +19,8 @@ public class Board {
     Point posA = new Point(0, 8);
     Point posB = new Point(16, 8);
 
+
+
     public Board() {
         for (int i = 0; i < 17; i++) {
             for (int j = 0; j < 17; j++) {
@@ -32,6 +34,18 @@ public class Board {
         }
         board[posA.x][posA.y] = 'A';
         board[posB.x][posB.y] = 'B';
+    }
+
+    public Board(Board board) {
+        for (int i = 0; i < 17; i++) {
+            for (int j = 0; j < 17; j++) {
+                this.board[i][j] = board.board[i][j];
+            }
+        }
+        Point point = new Point(board.posA.x, board.posA.y);
+        this.posA = point;
+        point = new Point(board.posB.x, board.posB.y);
+        this.posB = point;
     }
 
     void movePlayer(char player, int x, int y) {

@@ -52,7 +52,7 @@ public class Main extends Application {
         AIButton.setTranslateY(270);
         root.getChildren().add(AIButton);
 
-        warningText = new Text("warning");
+        warningText = new Text("");
         turnText = new Text("your`s turn");
         wallsNum = new Text("number of walls");
 
@@ -133,6 +133,9 @@ public class Main extends Application {
         if (playingWithAI) {
             playWithAI.rand();
             showTurn();
+            if (playWithAI.turnA) {
+                playWithAI.AITurn();
+            }
         } else {
             playWithFriend.rand();
             showTurn();
@@ -145,7 +148,7 @@ public class Main extends Application {
                 turnText.setText("It's B Turn");
                 wallsNum.setText("Remaining Walls: " + playWithAI.wallB);
             } else {
-                turnText.setText("It's A Turn");
+                turnText.setText("It's AI Turn");
                 wallsNum.setText("Remaining Walls: " + playWithAI.wallA);
             }
             // show board state?
@@ -282,27 +285,23 @@ public class Main extends Application {
                 x2 = i;
                 y2 = j;
             }
-
-            //System.out.println(i + ", " + j);
             String warn = "";
 
             if (count == 2) {
 
-                //warningText.setText("pick ");
                 warn = playWithAI.puttingWall(x1, y1, x2, y2);
-                //warningText.setText("pick 1");
                 if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls,only move")) {
                     warningText.setText(warn);
                     count = 0;
                 } else if (warn.equals("ok")) {
-                    warningText.setText("Wall Placed");
-                    //System.out.println(x1 + ", " + y1);
                     tiles[x1][y1].boarder.setFill(Color.BLACK);
-                    //System.out.println(x2 + ", " + y2);
                     tiles[x2][y2].boarder.setFill(Color.BLACK);
+                    warningText.setText("Wall Placed");
                     count = 0;
+
+                    playWithAI.updateTurn();
+                    AITurn();
                 }
-                showTurn();
             }
         } else if ((i % 2 == 0 && j % 2 == 0) && playWithAI.turnB) {
             int x, y;
@@ -315,25 +314,56 @@ public class Main extends Application {
             if (war.equals("ok")) {
                 tiles[x][y].text.setText("");
                 tiles[i][j].text.setText(c + "");
-                if (playWithAI.goalState()) {
-                    if (playWithAI.turnA) {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setContentText("PLAYER 'A' IS WINNER!");
-                        alert.showAndWait();
-                        exit();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setContentText("PLAYER 'B' IS WINNER!");
-                        alert.showAndWait();
-                        exit();
-                    }
-                } else {
-                    playWithAI.updateTurn();
-                    showTurn();
-                }
+
+                showWinner();
+
+                playWithAI.updateTurn();
+                AITurn();
+
+
             } else if (war.equals("false")) {
                 warningText.setText("invalid Cell, have another go!");
             }
         }
+    }
+
+    void showWinner() {
+        if (playWithAI.goalState()) {
+            if (playWithAI.turnA) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("PLAYER 'A' IS WINNER!");
+                alert.showAndWait();
+                exit();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("PLAYER 'B' IS WINNER!");
+                alert.showAndWait();
+                exit();
+            }
+        }
+    }
+
+    void AITurn() {
+
+        showTurn();
+        warningText.setText("wait for your opponent");
+        Object[] o = playWithAI.AITurn();
+        if ((boolean) o[0]) {
+            Point prev = (Point) o[1];
+            Point now = (Point) o[2];
+            tiles[prev.x][prev.y].setText("");
+            tiles[now.x][now.y].setText("A");
+
+            showWinner();
+
+        } else {
+            Point prev = (Point) o[1];
+            Point now = (Point) o[2];
+            tiles[prev.x][prev.y].boarder.setFill(Color.BLACK);
+            tiles[now.x][now.y].boarder.setFill(Color.BLACK);
+        }
+        warningText.setText("");
+        playWithAI.updateTurn();
+        showTurn();
     }
 }

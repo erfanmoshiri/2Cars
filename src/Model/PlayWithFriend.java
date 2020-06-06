@@ -13,8 +13,6 @@ public class PlayWithFriend {
     boolean turnA = false, turnB = false;
     char player;
     int wallB = 10, wallA = 10;
-    int rowNum[] = {-1, 0, 0, 1};
-    int colNum[] = {0, -1, 1, 0};
 
     void showBoardState() {
         for (int i = 0; i < 17; i++) {
