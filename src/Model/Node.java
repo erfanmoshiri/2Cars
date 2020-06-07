@@ -28,7 +28,7 @@ public class Node {
     }
 
     void calculateHeuristic() {
-        this.heuristic = this.hA - this.hB + this.wallA - this.wallB;
+        this.heuristic = this.hB - this.hA + this.wallA - this.wallB;
     }
 
 }
@@ -42,6 +42,7 @@ class MiniMAx {
     double miniMaxAlphaBeta(Node node, int level, int depth, boolean isMaxTurn, double alpha, double beta) {
 
         if (level == depth) {
+            node.calculateHeuristic();
             return node.heuristic;
         }
         Node n, n1 = null;
@@ -100,13 +101,23 @@ class MiniMAx {
         if (isMaxTurn) { // AI
 
             pq = new PriorityQueue<>(new MaxComperator());
-            Board b = pathFinder.copyBoard(node.board);
-            n = new Node(node.wallA, node.wallB, b);
+            Board b1 = new Board(node.board);
+            n = new Node(node.wallA, node.wallB, b1);
             nodes = pathFinder.movePlayer(n, 'A');
             while (!nodes.isEmpty()) {
                 n1 = nodes.poll();
-                n1.hA = pathFinder.BFS(n1.board.posA, 16, n1.board.board, true).counter;
-                n1.hB = pathFinder.BFS(n1.board.posB, 0, n1.board.board, false).counter;
+//                n1.hA = pathFinder.BFS(n1.board.posA, 16, n1.board.board, true).counter;
+//                n1.hB = pathFinder.BFS(n1.board.posB, 0, n1.board.board, false).counter;
+                Pos a = pathFinder.BFS(n1.board.posA, 16, n1.board.board, true);
+                Pos b = pathFinder.BFS(n1.board.posB, 0, n1.board.board, false);
+                if (a != null) {
+                    n1.hA = a.counter;
+                } else
+                    System.out.println(" a weird null path for A");
+                if (b != null) {
+                    n1.hB = b.counter;
+                } else
+                    System.out.println(" a weird null path for B");
                 n1.calculateHeuristic();
                 pq.add(n1);
             }
@@ -163,7 +174,7 @@ class MiniMAx {
         } else { // Human
 
             pq = new PriorityQueue<>(new MinComperator());
-            Board b1 = pathFinder.copyBoard(node.board);
+            Board b1 = new Board(node.board);
             n = new Node(node.wallA, node.wallB, b1);
             nodes = pathFinder.movePlayer(n, 'B');
             while (!nodes.isEmpty()) {

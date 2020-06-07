@@ -134,7 +134,7 @@ public class Main extends Application {
             playWithAI.rand();
             showTurn();
             if (playWithAI.turnA) {
-                playWithAI.AITurn();
+                AITurn();
             }
         } else {
             playWithFriend.rand();

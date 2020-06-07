@@ -27,7 +27,7 @@ public class PathFinder {
         while (!queue.isEmpty()) {
             Pos pt = queue.peek();
             if (pt.point.x == des) { // reach end line
-                System.out.println("counter : " + pt.counter + " , " + turnA);
+//                System.out.println("counter : " + pt.counter + " , " + turnA);
                 return pt;
             }
             queue.poll();
@@ -354,7 +354,7 @@ public class PathFinder {
             }
         }
 
-        if (currY <= 15) {
+        if (currY <= 14) {
             if (node.board.board[currX][currY + 1] != 'W') {
                 if (node.board.board[currX][currY + 2] != 'B' && node.board.board[currX][currY + 2] != 'A') {
                     nodes.add(makeNodeByMovingPlayer(node, currX, currY + 2, c));
@@ -363,7 +363,7 @@ public class PathFinder {
                         if (currX >= 2 && node.board.board[currX - 1][currY + 2] != 'W') {
                             nodes.add(makeNodeByMovingPlayer(node, currX - 2, currY + 2, c));
                         }
-                        if (currX <= 15 && node.board.board[currX + 1][currY + 2] != 'W') {
+                        if (currX <= 14 && node.board.board[currX + 1][currY + 2] != 'W') {
                             nodes.add(makeNodeByMovingPlayer(node, currX + 2, currY + 2, c));
                         }
                     } else if (currY <= 12) {
@@ -383,7 +383,7 @@ public class PathFinder {
                             nodes.add(makeNodeByMovingPlayer(node, currX - 2, currY - 2, c));
 
                         }
-                        if (currY <= 15 && node.board.board[currX - 2][currY + 1] != 'W') {
+                        if (currY <= 14 && node.board.board[currX - 2][currY + 1] != 'W') {
                             nodes.add(makeNodeByMovingPlayer(node, currX - 2, currY + 2, c));
                         }
                     } else if (currX >= 4) {
@@ -436,20 +436,20 @@ public class PathFinder {
         return n;
     }
 
-    Board copyBoard(Board board) {
-
-//        for (int i = 0; i < 17; i++) {
-//            System.arraycopy(board.board[i], 0, b.board[i], 0, 17);
-//        }
-//        b.posA = board.posA;
-//        b.posB = board.posB;
-//        System.out.println("prev " + board.posA.x + " , " + board.posA.y);
-//        b.posA.x ++;
-//        b.posA.y ++;
-//        System.out.println("after " + board.posA.x + " , " + board.posA.y);
-
-        return new Board(board);
-    }
+//    Board copyBoard(Board board) {
+//
+////        for (int i = 0; i < 17; i++) {
+////            System.arraycopy(board.board[i], 0, b.board[i], 0, 17);
+////        }
+////        b.posA = board.posA;
+////        b.posB = board.posB;
+////        System.out.println("prev " + board.posA.x + " , " + board.posA.y);
+////        b.posA.x ++;
+////        b.posA.y ++;
+////        System.out.println("after " + board.posA.x + " , " + board.posA.y);
+//
+//        return new Board(board);
+//    }
 
     Node makeNodeByMovingPlayer(Node node, int x, int y, char c) {
         Board b = new Board(node.board);
@@ -459,8 +459,7 @@ public class PathFinder {
 //        n.wallB ++;
 //        System.out.println("after " + node.wallA + " , " + node.wallB);
         n.board.movePlayer(c, x, y);
-        System.out.println("old : " + node.board.board[x][y]);
-        System.out.println("new : " + n.board.board[x][y]);
+
         return n;
     }
 }
