@@ -1,11 +1,13 @@
 package Model;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -26,8 +28,9 @@ public class Main extends Application {
     int count = 0;
     Button friendButton;
     Button AIButton;
+    Button goAI;
     Boolean playingWithAI = false;
-    boolean a = true;
+    boolean a = false;
 
 
     public static void main(String[] args) {
@@ -36,7 +39,7 @@ public class Main extends Application {
 
     private Parent createContent() {
         Pane root = new Pane();
-        root.setPrefSize(800, 600);
+        root.setPrefSize(900, 600);
         root.setBackground(new Background(new BackgroundFill(Color.web("#EEDEC0"), CornerRadii.EMPTY, Insets.EMPTY)));
 
         friendButton = new Button("PLAY WITH A FRIEND");
@@ -53,6 +56,14 @@ public class Main extends Application {
         AIButton.setTranslateY(270);
         root.getChildren().add(AIButton);
 
+        goAI = new Button("GO AI");
+        goAI.setPrefHeight(35);
+        goAI.setPrefWidth(100);
+        goAI.setTranslateX(610);
+        goAI.setTranslateY(470);
+        root.getChildren().add(goAI);
+        goAI.setVisible(false);
+
         warningText = new Text("");
         turnText = new Text("your`s turn");
         wallsNum = new Text("number of walls");
@@ -68,9 +79,15 @@ public class Main extends Application {
         AIButton.setOnMouseClicked(mouseEvent -> {
             playWithAI = new PlayWithAI();
             playingWithAI = true;
+            goAI.setVisible(true);
             init(root);
             startGame();
+        });
 
+        goAI.setOnMouseClicked(mouseEvent ->{
+            if (playWithAI.turnA) {
+                AITurn();
+            }
         });
         return root;
     }
@@ -128,9 +145,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(createContent()));
         primaryStage.setResizable(false);
         primaryStage.show();
-        if (!a) {
-            System.out.println("AAAAAAAAAAAAAAAAAAAAAa");
-        }
+
     }
 
     private void startGame() {
@@ -194,13 +209,12 @@ public class Main extends Application {
             getChildren().addAll(boarder, text);
 
             setOnMouseClicked(event -> {
-                if (!playingWithAI){
-//                    warningText.setText("AAAAAAAAAAAa");
+                if (!playingWithAI) {
                     friendPlayed(i, j);
-
-                }
-                else
+                } else {
                     AIPlayed(i, j);
+                }
+
             });
         }
 
@@ -221,22 +235,17 @@ public class Main extends Application {
                 y2 = j;
             }
 
-            //System.out.println(i + ", " + j);
             String warn = "";
 
             if (count == 2) {
 
-                //warningText.setText("pick ");
                 warn = playWithFriend.puttingWall(x1, y1, x2, y2);
-                //warningText.setText("pick 1");
                 if (warn.equals("invalidWall") || warn.equals("wallExists") || warn.equals("noWalls,only move")) {
                     warningText.setText(warn);
                     count = 0;
                 } else if (warn.equals("ok")) {
                     warningText.setText("Wall Placed");
-                    //System.out.println(x1 + ", " + y1);
                     tiles[x1][y1].boarder.setFill(Color.BLACK);
-                    //System.out.println(x2 + ", " + y2);
                     tiles[x2][y2].boarder.setFill(Color.BLACK);
                     count = 0;
                 }
@@ -307,8 +316,9 @@ public class Main extends Application {
                     count = 0;
 
                     playWithAI.updateTurn();
-                    a = false;
-                    AITurn();
+                    showTurn();
+                    warningText.setText("click the button, wait for your opponent");
+                    //AITurn();
                 }
             }
         } else if ((i % 2 == 0 && j % 2 == 0) && playWithAI.turnB) {
@@ -326,7 +336,9 @@ public class Main extends Application {
                 showWinner();
 
                 playWithAI.updateTurn();
-                AITurn();
+                showTurn();
+                warningText.setText("ckic  the button, and wait for your opponent");
+                //AITurn();
 
 
             } else if (war.equals("false")) {
@@ -353,8 +365,7 @@ public class Main extends Application {
 
     void AITurn() {
 
-        showTurn();
-        warningText.setText("wait for your opponent");
+
         Object[] o = playWithAI.AITurn();
         if ((boolean) o[0]) {
             Point prev = (Point) o[1];
