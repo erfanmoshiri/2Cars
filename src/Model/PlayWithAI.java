@@ -402,7 +402,7 @@ public class PlayWithAI {
         Node node = new Node(wallA, wallB, new Board(game));
 
 
-        double x = miniMax.miniMaxAlphaBeta(node, 0, 2, true, -1 * Integer.MAX_VALUE, Integer.MAX_VALUE);
+        double x = miniMax.miniMaxAlphaBeta(node, 0, 3, true, -1 * Integer.MAX_VALUE, Integer.MAX_VALUE);
         System.out.println("heuristic : " + x);
         Node n = miniMax.finalNode;
         if (n.wall1 != null && n.wall2 != null) {

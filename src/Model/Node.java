@@ -28,7 +28,7 @@ public class Node {
     }
 
     void calculateHeuristic() {
-        this.heuristic = this.hB - this.hA + this.wallA - this.wallB;
+        this.heuristic = (this.hB - 2 * this.hA) + 2 * this.wallA - this.wallB;
     }
 
 }
@@ -41,55 +41,80 @@ class MiniMAx {
 
     double miniMaxAlphaBeta(Node node, int level, int depth, boolean isMaxTurn, double alpha, double beta) {
 
-        if (level == depth) {
-            node.calculateHeuristic();
-            return node.heuristic;
-        }
-        Node n, n1 = null;
-
-        if (isMaxTurn) {
-
-            double best = -1 * Double.MAX_VALUE;
-            double value;
-            node.childs = childGenerator(node, true, level, depth);
-            while (!node.childs.isEmpty()) {
-                n = node.childs.poll();
-                value = miniMaxAlphaBeta(n, level + 1, depth, false, alpha, beta);
-                if (value > best) {
-                    best = value;
-                    n1 = n;
+        if (node.wallB == 0) {
+            if (node.wallA == 0) {
+                Pos a = pathFinder.BFS(node.board.posA, 16, node.board.board, true);
+                while (a.prevPos.prevPos != null) {
+                    a = a.prevPos;
                 }
-                if (best > alpha)
-                    alpha = best;
-                if (beta < alpha)
-                    break;
+                Board b = new Board(node.board);
+                b.movePlayer('A', a.point.x, a.point.y);
+                Node n = new Node(node.wallA, node.wallB, b);
+                finalNode = n;
+            } else {
+                Pos a = pathFinder.BFS(node.board.posA, 16, node.board.board, true);
+                Pos b = pathFinder.BFS(node.board.posB, 0, node.board.board, false);
+                if (a.counter < b.counter) {
+                    while (a.prevPos.prevPos != null) {
+                        a = a.prevPos;
+                    }
+                    Board b1 = new Board(node.board);
+                    b1.movePlayer('A', a.point.x, a.point.y);
+                    Node n = new Node(node.wallA, node.wallB, b1);
+                    finalNode = n;
+                }
             }
-            if (level == 0) {
-                System.out.println("node set!");
-                finalNode = n1;
-            }
-            return best;
-
-
+            return 0;
         } else {
-
-            double best = Double.MAX_VALUE;
-            double value;
-            node.childs = childGenerator(node, false, level, depth);
-            while (!node.childs.isEmpty()) {
-                n = node.childs.poll();
-                value = miniMaxAlphaBeta(n, level + 1, depth, true, alpha, beta);
-                if (value < best)
-                    best = value;
-                if (best < beta)
-                    beta = best;
-                if (beta <= alpha)
-                    break;
+            if (level == depth) {
+                node.calculateHeuristic();
+                return node.heuristic;
             }
-            return best;
+            Node n, n1 = null;
 
+            if (isMaxTurn) {
+
+                double best = -1 * Double.MAX_VALUE;
+                double value;
+                node.childs = childGenerator(node, true, level, depth);
+                while (!node.childs.isEmpty()) {
+                    n = node.childs.poll();
+                    value = miniMaxAlphaBeta(n, level + 1, depth, false, alpha, beta);
+                    if (value > best) {
+                        best = value;
+                        n1 = n;
+                    }
+                    if (best > alpha)
+                        alpha = best;
+                    if (beta < alpha)
+                        break;
+                }
+                if (level == 0) {
+                    System.out.println("node set!");
+                    finalNode = n1;
+                }
+                return best;
+
+
+            } else {
+
+                double best = Double.MAX_VALUE;
+                double value;
+                node.childs = childGenerator(node, false, level, depth);
+                while (!node.childs.isEmpty()) {
+                    n = node.childs.poll();
+                    value = miniMaxAlphaBeta(n, level + 1, depth, true, alpha, beta);
+                    if (value < best)
+                        best = value;
+                    if (best < beta)
+                        beta = best;
+                    if (beta <= alpha)
+                        break;
+                }
+                return best;
+
+            }
         }
-
     }
 
     PriorityQueue<Node> childGenerator(Node node, boolean isMaxTurn, int level, int depth) {

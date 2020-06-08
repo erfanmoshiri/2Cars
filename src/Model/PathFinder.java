@@ -50,6 +50,12 @@ public class PathFinder {
 
         if (currX <= 14) {
             if (board[currX + 1][currY] != 'W') {
+                if (board[currX + 2][currY] == 'B' && currX + 2 == 16) {
+                    if (!visited[currX + 2][currY]) {
+                        queue.add(new Pos(new Point(currX + 2, currY), counter + 1, pos));
+                        visited[currX + 2][currY] = true;
+                    }
+                }
                 if (board[currX + 2][currY] != 'B' && board[currX + 2][currY] != 'A') {
                     if (!visited[currX + 2][currY]) {
                         queue.add(new Pos(new Point(currX + 2, currY), counter + 1, pos));
@@ -142,6 +148,12 @@ public class PathFinder {
 
         if (currX >= 2) {
             if (board[currX - 1][currY] != 'W') {
+                if (board[currX - 2][currY] == 'A' && currX - 2 == 0) {
+                    if (!visited[currX - 2][currY]) {
+                        queue.add(new Pos(new Point(currX - 2, currY), counter + 1, pos));
+                        visited[currX - 2][currY] = true;
+                    }
+                }
                 if (board[currX - 2][currY] != 'B' && board[currX - 2][currY] != 'A') {
                     if (!visited[currX - 2][currY]) {
                         queue.add(new Pos(new Point(currX - 2, currY), counter + 1, pos));

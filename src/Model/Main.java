@@ -27,6 +27,7 @@ public class Main extends Application {
     Button friendButton;
     Button AIButton;
     Boolean playingWithAI = false;
+    boolean a = true;
 
 
     public static void main(String[] args) {
@@ -127,6 +128,9 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(createContent()));
         primaryStage.setResizable(false);
         primaryStage.show();
+        if (!a) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAa");
+        }
     }
 
     private void startGame() {
@@ -190,8 +194,11 @@ public class Main extends Application {
             getChildren().addAll(boarder, text);
 
             setOnMouseClicked(event -> {
-                if (!playingWithAI)
+                if (!playingWithAI){
+//                    warningText.setText("AAAAAAAAAAAa");
                     friendPlayed(i, j);
+
+                }
                 else
                     AIPlayed(i, j);
             });
@@ -300,6 +307,7 @@ public class Main extends Application {
                     count = 0;
 
                     playWithAI.updateTurn();
+                    a = false;
                     AITurn();
                 }
             }
