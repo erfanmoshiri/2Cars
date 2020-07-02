@@ -433,6 +433,8 @@ public class PathFinder {
                             n.wallB--;
                         }
                         n.calculateHeuristic();
+                        calculateForward(n);
+                        //System.out.println("////////////Forward : " + n.forwardA);
                     } else {
                         return null;
                     }
@@ -448,30 +450,35 @@ public class PathFinder {
         return n;
     }
 
-//    Board copyBoard(Board board) {
-//
-////        for (int i = 0; i < 17; i++) {
-////            System.arraycopy(board.board[i], 0, b.board[i], 0, 17);
-////        }
-////        b.posA = board.posA;
-////        b.posB = board.posB;
-////        System.out.println("prev " + board.posA.x + " , " + board.posA.y);
-////        b.posA.x ++;
-////        b.posA.y ++;
-////        System.out.println("after " + board.posA.x + " , " + board.posA.y);
-//
-//        return new Board(board);
-//    }
-
     Node makeNodeByMovingPlayer(Node node, int x, int y, char c) {
         Board b = new Board(node.board);
         Node n = new Node(node.wallA, node.wallB, b);
-//        System.out.println("prev " + node.wallA + " , " + node.wallB);
-//        n.wallA ++;
-//        n.wallB ++;
-//        System.out.println("after " + node.wallA + " , " + node.wallB);
         n.board.movePlayer(c, x, y);
 
         return n;
+    }
+
+    void calculateForward(Node node) {
+
+        int x = node.board.posA.x;
+        int y = node.board.posA.y;
+        x++;
+        int count = 0;
+        while (x <= 16 && node.board.board[x][y] != 'W') {
+            x += 2;
+            count++;
+        }
+        node.forwardA = count;
+
+        x = node.board.posB.x;
+        y = node.board.posB.y;
+        x--;
+        count = 0;
+        while (x > 0 && node.board.board[x][y] != 'W') {
+            x -= 2;
+            count++;
+        }
+        node.forwardB = count;
+
     }
 }

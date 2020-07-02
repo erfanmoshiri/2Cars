@@ -378,31 +378,13 @@ public class PlayWithAI {
         return false;
     }
 
-    public static void main(String[] args) {
-
-//        int[][] ar = new int[17][17];
-//        int x = 129;
-//        for (int i = 0; i < 1000000; i++) {
-//            //System.out.println(i);
-//            int[][] ar1 = new int[17][17];
-//            ar1 = ar.clone();
-//        }
-        int a = 5;
-        int b = 3;
-        double f = 3.4;
-        double e = a + b + f;
-        double d = 11.43;
-        System.out.println(d > e);
-
-    }
-
     public Object[] AITurn() {
 
         Object[] o = new Object[3];
         Node node = new Node(wallA, wallB, new Board(game));
 
 
-        double x = miniMax.miniMaxAlphaBeta(node, 0, 3, true, -1 * Integer.MAX_VALUE, Integer.MAX_VALUE);
+        double x = miniMax.miniMaxAlphaBeta(node, 0, 3, true, -1 * Integer.MAX_VALUE, Integer.MAX_VALUE, 1);
         System.out.println("heuristic : " + x);
         Node n = miniMax.finalNode;
         if (n.wall1 != null && n.wall2 != null) {
@@ -429,5 +411,16 @@ public class PlayWithAI {
         System.out.println(game.posB.x + " , " + game.posB.y);
 
         return o;
+    }
+
+    public static void main(String[] args) {
+
+        int a = 5;
+        int b = 3;
+        double f = 3.4;
+        double e = a + b + f;
+        double d = 11.43;
+        System.out.println(d > e);
+
     }
 }

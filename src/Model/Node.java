@@ -3,23 +3,22 @@ package Model;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 
 public class Node {
 
     int hA;
     int hB;
+    int forwardA, forwardB;
     double heuristic;
     int wallA;
     int wallB;
     Board board;
-    Point wall1 = null;
-    Point wall2 = null; // badan befahmim divar ezafe shode ya player jabeja shode
-    PriorityQueue<Node> childs = null;
+    Point wall1 = null; // badan befahmim divar ezafe shode ya player jabeja shode
+    Point wall2 = null;
+//    PriorityQueue<Node> childs = null;
+    //float[] gene = new float[8];
 
-
-    public Node(Board board) {
-        this.board = board;
-    }
 
     public Node(int wallA, int wallB, Board board) {
         this.wallA = wallA;
@@ -27,8 +26,9 @@ public class Node {
         this.board = board;
     }
 
-    void calculateHeuristic() {
-        this.heuristic = (this.hB - 2 * this.hA) + 2 * this.wallA - this.wallB;
+
+    void calculateHeuristic() { //receives a gene
+        this.heuristic = (1.5 * this.hB - this.hA) + 1.4 * (this.wallA - this.wallB);
     }
 
 }
@@ -39,8 +39,10 @@ class MiniMAx {
 
     PathFinder pathFinder = new PathFinder();
 
-    double miniMaxAlphaBeta(Node node, int level, int depth, boolean isMaxTurn, double alpha, double beta) {
+    double miniMaxAlphaBeta(Node node, int level, int depth, boolean isMaxTurn, double alpha, double beta, int turn) {
 
+
+        //need to be fixed !!
         if (node.wallB == 0) {
             if (node.wallA == 0) {
                 Pos a = pathFinder.BFS(node.board.posA, 16, node.board.board, true);
@@ -55,7 +57,8 @@ class MiniMAx {
                 Pos a = pathFinder.BFS(node.board.posA, 16, node.board.board, true);
                 Pos b = pathFinder.BFS(node.board.posB, 0, node.board.board, false);
                 if (a.counter < b.counter) {
-                    while (a.prevPos.prevPos != null) {
+                    int j = a.counter - 1;
+                    for (int i = 0; i < j; i++) {
                         a = a.prevPos;
                     }
                     Board b1 = new Board(node.board);
@@ -72,14 +75,18 @@ class MiniMAx {
             }
             Node n, n1 = null;
 
+            PriorityQueue<Node> childs;
+
             if (isMaxTurn) {
 
                 double best = -1 * Double.MAX_VALUE;
                 double value;
-                node.childs = childGenerator(node, true, level, depth);
-                while (!node.childs.isEmpty()) {
-                    n = node.childs.poll();
-                    value = miniMaxAlphaBeta(n, level + 1, depth, false, alpha, beta);
+                childs = childGenerator(node, level, depth, turn);
+//                System.out.println("level : " + level + " , childs : " + node.childs.size());
+
+                while (!childs.isEmpty()) {
+                    n = childs.poll();
+                    value = miniMaxAlphaBeta(n, level + 1, depth, false, alpha, beta, turn * -1);
                     if (value > best) {
                         best = value;
                         n1 = n;
@@ -90,7 +97,6 @@ class MiniMAx {
                         break;
                 }
                 if (level == 0) {
-                    System.out.println("node set!");
                     finalNode = n1;
                 }
                 return best;
@@ -100,10 +106,10 @@ class MiniMAx {
 
                 double best = Double.MAX_VALUE;
                 double value;
-                node.childs = childGenerator(node, false, level, depth);
-                while (!node.childs.isEmpty()) {
-                    n = node.childs.poll();
-                    value = miniMaxAlphaBeta(n, level + 1, depth, true, alpha, beta);
+                childs = childGenerator(node, level, depth, turn);
+                while (!childs.isEmpty()) {
+                    n = childs.poll();
+                    value = miniMaxAlphaBeta(n, level + 1, depth, true, alpha, beta, turn * -1);
                     if (value < best)
                         best = value;
                     if (best < beta)
@@ -117,13 +123,13 @@ class MiniMAx {
         }
     }
 
-    PriorityQueue<Node> childGenerator(Node node, boolean isMaxTurn, int level, int depth) {
+    PriorityQueue<Node> childGenerator(Node node, int level, int depth, int turn) {
 
         PriorityQueue<Node> pq;
         Queue<Node> nodes;
         Node n, n1, n2;
 
-        if (isMaxTurn) { // AI
+        if (turn == 1) { // A
 
             pq = new PriorityQueue<>(new MaxComperator());
             Board b1 = new Board(node.board);
@@ -144,6 +150,7 @@ class MiniMAx {
                 } else
                     System.out.println(" a weird null path for B");
                 n1.calculateHeuristic();
+                pathFinder.calculateForward(n1);
                 pq.add(n1);
             }
 
@@ -173,9 +180,18 @@ class MiniMAx {
                     }
                 } else {
                     // sade sazii
-                    for (int j = 1; j < node.board.posB.x; j += 2) // horizontal wall
+                    Random r = new Random();
+                    boolean[][] visited;
+
+
+                    int x1 = r.nextInt(2) + 1;
+                    x1 *= 2;
+                    int x2 = r.nextInt(2) + 1;
+                    x2 *= 2;
+
+                    for (int j = 1; j <= node.board.posB.x - 1; j += x1) // horizontal wall
                     {
-                        for (int k = 0; k < 15; k += 2) {
+                        for (int k = 0; k <= 14; k += x2) {
                             n2 = pathFinder.puttingWall(node, j, k, j, k + 2, true);
                             if (n2 != null) {
                                 pq.add(n2);
@@ -183,9 +199,14 @@ class MiniMAx {
                         }
                     }
 
-                    for (int j = 0; j <= node.board.posB.x - 2; j += 2) // vertical wall
+
+                    x1 = r.nextInt(2) + 1;
+                    x1 *= 2;
+                    x2 = r.nextInt(2) + 1;
+                    x2 *= 2;
+                    for (int j = 0; j <= node.board.posB.x - 2; j += x1) // vertical wall
                     {
-                        for (int k = 1; k < 15; k += 2) {
+                        for (int k = 5; k <= 13; k += x2) {
                             n2 = pathFinder.puttingWall(node, j, k, j + 2, k, true);
                             if (n2 != null) {
                                 pq.add(n2);
@@ -196,7 +217,7 @@ class MiniMAx {
             }
 
 
-        } else { // Human
+        } else { // B
 
             pq = new PriorityQueue<>(new MinComperator());
             Board b1 = new Board(node.board);
@@ -244,10 +265,15 @@ class MiniMAx {
                         }
                     }
                 } else {
-                    // sade sazii
-                    for (int j = node.board.posA.x + 1; j < 16; j += 2) // horizontal wall
+
+                    Random r = new Random();
+                    int x1 = r.nextInt(2) + 1;
+                    x1 *= 2;
+                    int x2 = r.nextInt(2) + 1;
+                    x2 *= 2;
+                    for (int j = node.board.posA.x + 1; j < 16; j += x1) // horizontal wall
                     {
-                        for (int k = 0; k < 15; k += 2) {
+                        for (int k = 0; k < 15; k += x2) {
                             n2 = pathFinder.puttingWall(node, j, k, j, k + 2, false);
                             if (n2 != null) {
                                 pq.add(n2);
@@ -255,9 +281,13 @@ class MiniMAx {
                         }
                     }
 
+                    x1 = r.nextInt(2) + 1;
+                    x1 *= 2;
+                    x2 = r.nextInt(2) + 1;
+                    x2 *= 2;
                     for (int j = node.board.posA.x; j <= 14; j += 2) // vertical wall
                     {
-                        for (int k = 1; k < 15; k += 2) {
+                        for (int k = 5; k <= 13; k += 2) {
                             n2 = pathFinder.puttingWall(node, j, k, j + 2, k, false);
                             if (n2 != null) {
                                 pq.add(n2);

@@ -18,19 +18,19 @@ import javafx.stage.Stage;
 
 import static javafx.application.Platform.exit;
 
-public class Main extends Application {
+public class AIMain extends Application {
     Tile[][] tiles;
     Text turnText;
     Text warningText;
     Text wallsNum;
     PlayWithFriend playWithFriend;
     PlayWithAI playWithAI;
-    PlayAIvsAI playAIvsAI;
     int x1, y1, x2, y2;
     int count = 0;
-    Button friendButton, AIButton, AIvsAIButton;
+    Button friendButton;
+    Button AIButton;
     Button goAI;
-    Boolean playingWithAI = false, playingAIvsAI = false;
+    Boolean playingWithAI = false;
     boolean a = false;
 
 
@@ -46,23 +46,16 @@ public class Main extends Application {
         friendButton = new Button("PLAY WITH A FRIEND");
         friendButton.setPrefHeight(35);
         friendButton.setPrefWidth(140);
-        friendButton.setTranslateX(360);
+        friendButton.setTranslateX(330);
         friendButton.setTranslateY(230);
         root.getChildren().add(friendButton);
 
         AIButton = new Button("PLAY WITH AI");
         AIButton.setPrefHeight(35);
         AIButton.setPrefWidth(140);
-        AIButton.setTranslateX(360);
+        AIButton.setTranslateX(330);
         AIButton.setTranslateY(270);
         root.getChildren().add(AIButton);
-
-        AIvsAIButton = new Button("AI Vs. AI");
-        AIvsAIButton.setPrefHeight(35);
-        AIvsAIButton.setPrefWidth(140);
-        AIvsAIButton.setTranslateX(360);
-        AIvsAIButton.setTranslateY(310);
-        root.getChildren().add(AIvsAIButton);
 
         goAI = new Button("GO AI");
         goAI.setPrefHeight(35);
@@ -92,27 +85,13 @@ public class Main extends Application {
             startGame();
         });
 
-        AIvsAIButton.setOnMouseClicked(mouseEvent -> {
-            playAIvsAI = new PlayAIvsAI();
-            playingAIvsAI = true;
-            goAI.setVisible(true);
-            init(root);
-            startGame();
-        });
-
-        goAI.setOnMouseClicked(mouseEvent -> {
-            if (playingWithAI) {
-
-                if (playWithAI.turnA) {
-                    AITurn();
-                }
-            } else if (playingAIvsAI) {
-                AIvsAITurn();
+        goAI.setOnMouseClicked(mouseEvent ->{
+            if (playWithAI.turnA) {
+                AITurn();
             }
         });
         return root;
     }
-
 
     void init(Pane root) {
         root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -178,9 +157,6 @@ public class Main extends Application {
             if (playWithAI.turnA) {
                 AITurn();
             }
-        } else if (playingAIvsAI) {
-            playAIvsAI.rand();
-            showTurn();
         } else {
             playWithFriend.rand();
             showTurn();
@@ -198,17 +174,6 @@ public class Main extends Application {
                 wallsNum.setText("Remaining Walls: " + playWithAI.wallA);
             }
             // show board state?
-
-        } else if (playingAIvsAI) {
-            if (playAIvsAI.turnB) {
-                turnText.setText("It's B Turn");
-                wallsNum.setText("Remaining Walls: " + playAIvsAI.wallB);
-            } else {
-                turnText.setText("It's A Turn");
-                wallsNum.setText("Remaining Walls: " + playAIvsAI.wallA);
-            }
-
-            //AIvsAITurn();
 
         } else {
             if (playWithFriend.turnB) {
@@ -247,10 +212,10 @@ public class Main extends Application {
             getChildren().addAll(boarder, text);
 
             setOnMouseClicked(event -> {
-                if (playingWithAI) {
-                    AIPlayed(i, j);
-                } else if (!playingAIvsAI) {
+                if (!playingWithAI) {
                     friendPlayed(i, j);
+                } else {
+                    AIPlayed(i, j);
                 }
 
             });
@@ -385,38 +350,23 @@ public class Main extends Application {
     }
 
     void showWinner() {
-        if (playingWithAI) {
-            if (playWithAI.goalState()) {
-                if (playWithAI.turnA) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("PLAYER 'A' IS WINNER!");
-                    alert.showAndWait();
-                    exit();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("PLAYER 'B' IS WINNER!");
-                    alert.showAndWait();
-                    exit();
-                }
-            }
-        } else if (playingAIvsAI) {
-            if (playAIvsAI.goalState()) {
-                if (playAIvsAI.turnA) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("PLAYER 'A' IS WINNER!");
-                    alert.showAndWait();
-                    exit();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setContentText("PLAYER 'B' IS WINNER!");
-                    alert.showAndWait();
-                    exit();
-                }
+        if (playWithAI.goalState()) {
+            if (playWithAI.turnA) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("PLAYER 'A' IS WINNER!");
+                alert.showAndWait();
+                exit();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText("PLAYER 'B' IS WINNER!");
+                alert.showAndWait();
+                exit();
             }
         }
     }
 
     void AITurn() {
+
 
         Object[] o = playWithAI.AITurn();
         if ((boolean) o[0]) {
@@ -437,35 +387,4 @@ public class Main extends Application {
         playWithAI.updateTurn();
         showTurn();
     }
-
-    void AIvsAITurn() {
-
-        Object[] o = playAIvsAI.AIvsAITurn();
-        if ((boolean) o[0]) {
-            Point prev = (Point) o[1];
-            Point now = (Point) o[2];
-
-            if (playAIvsAI.turnA) {
-                tiles[prev.x][prev.y].setText("");
-                tiles[now.x][now.y].setText("A");
-            } else {
-                tiles[prev.x][prev.y].setText("");
-                tiles[now.x][now.y].setText("B");
-            }
-
-            showWinner();
-
-        } else {
-            Point prev = (Point) o[1];
-            Point now = (Point) o[2];
-            tiles[prev.x][prev.y].boarder.setFill(Color.BLACK);
-            tiles[now.x][now.y].boarder.setFill(Color.BLACK);
-        }
-        warningText.setText("");
-        playAIvsAI.updateTurn();
-        showTurn();
-
-
-    }
-
 }
