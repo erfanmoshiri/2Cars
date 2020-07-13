@@ -30,10 +30,10 @@ public class Node {
     void calculateHeuristic(int turn) { //receives a gene
         if (turn == 1) {
 
-            this.heuristic = (1.5 * this.hB - this.hA) + 1.4 * (this.wallA - this.wallB);
+            this.heuristic = 1.5 * (this.hB - this.hA) + 1.4 * (this.wallA - this.wallB) + (board.posA.x - (16 - board.posB.x)) + (forwardA - forwardB);
         } else {
 
-            this.heuristic = (1.5 * this.hA - this.hB) + 1.4 * (this.wallB - this.wallA);
+            this.heuristic = (1.5 * this.hA - this.hB) + 1.4 * (this.wallB - this.wallA) + ((16 - board.posB.x) - board.posA.x) + (forwardB - forwardA);
         }
     }
 
