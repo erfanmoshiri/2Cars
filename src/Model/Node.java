@@ -27,19 +27,30 @@ public class Node {
     }
 
 
-    void calculateHeuristic(int turn) { //receives a gene
-        if (turn == 1) {
+    void calculateHeuristic(boolean its_A, Gene gene) { //receives a gene
 
-            this.heuristic = 1.5 * (this.hB - this.hA) + 1.4 * (this.wallA - this.wallB) + (board.posA.x - (16 - board.posB.x)) + (forwardA - forwardB);
+        double n1 = gene.chromosome[0];
+        double n2 = gene.chromosome[1];
+        double n3 = gene.chromosome[2];
+        double n4 = gene.chromosome[3];
+
+        if (its_A) {
+
+            this.heuristic = n1 * (this.hB - this.hA) + n2 * (this.wallA - this.wallB) + n3 * (board.posA.x - (16 - board.posB.x)) + n4 * (forwardA - forwardB);
+
         } else {
 
-            this.heuristic = (1.5 * this.hA - this.hB) + 1.4 * (this.wallB - this.wallA) + ((16 - board.posB.x) - board.posA.x) + (forwardB - forwardA);
+            this.heuristic = n1 * (this.hA - this.hB) + n2 * (this.wallB - this.wallA) + n3 * ((16 - board.posB.x) - board.posA.x) + n4 * (forwardB - forwardA);
         }
     }
+
 
 }
 
 class MiniMAx {
+
+    Gene gene;
+    boolean its_A;
 
     Node finalNode = null;
 
@@ -76,7 +87,8 @@ class MiniMAx {
             return 0;
         } else {
             if (level == depth) {
-                node.calculateHeuristic(turn);
+                pathFinder.calculateForward(node);
+                node.calculateHeuristic(its_A, gene);
                 return node.heuristic;
             }
             Node n, n1 = null;
@@ -156,7 +168,7 @@ class MiniMAx {
                 } else
                     System.out.println(" a weird null path for B");
                 pathFinder.calculateForward(n1);
-                n1.calculateHeuristic(turn);
+                n1.calculateHeuristic(its_A, gene);
                 pq.add(n1);
             }
 
@@ -242,7 +254,8 @@ class MiniMAx {
                 } else
                     System.out.println(" a weird null path for B");
 
-                n1.calculateHeuristic(turn);
+                pathFinder.calculateForward(n1);
+                n1.calculateHeuristic(its_A, gene);
                 pq.add(n1);
             }
 

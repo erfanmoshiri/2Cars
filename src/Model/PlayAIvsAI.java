@@ -1,5 +1,9 @@
 package Model;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import static java.lang.StrictMath.abs;
 
 public class PlayAIvsAI {
@@ -10,7 +14,7 @@ public class PlayAIvsAI {
     boolean turnA = false, turnB = false;
     char player;
     int wallB = 10, wallA = 10;
-    Generation generation;
+
     Gene gene1, gene2;
 
 
@@ -52,6 +56,7 @@ public class PlayAIvsAI {
         if (turnA) {
             if (game.posA.x == 16) {
                 System.out.println("player A is winner!");
+
                 return true;
             }
         } else if (turnB) {
@@ -69,10 +74,19 @@ public class PlayAIvsAI {
         Node node = new Node(wallA, wallB, new Board(game));
 
         int i;
-        if(turnA)
+        if (turnA)
             i = 1;
         else
             i = -1;
+
+        if (turnA) {
+            miniMax.gene = gene1;
+            miniMax.its_A = true;
+
+        } else {
+            miniMax.gene = gene2;
+            miniMax.its_A = false;
+        }
 
         double x = miniMax.miniMaxAlphaBeta(node, 0, 3, true, -1 * Integer.MAX_VALUE, Integer.MAX_VALUE, i);
         System.out.println("heuristic : " + x);
@@ -84,7 +98,7 @@ public class PlayAIvsAI {
 
             System.out.println(" new wall found : " + n.wall1.x + "," + n.wall1.y + "||" + n.wall2.x + "," + n.wall2.y);
             game.putWall(n.wall1.x, n.wall1.y, n.wall2.x, n.wall2.y);
-            if(turnA)
+            if (turnA)
                 wallA--;
             else
                 wallB--;
@@ -113,6 +127,32 @@ public class PlayAIvsAI {
 //        System.out.println(game.posB.x + " , " + game.posB.y);
 
         return o;
+    }
+
+    void readGenes() {
+        try {
+            FileInputStream is = new FileInputStream("src/Source/current_generation.txt");
+            ObjectInputStream oi = new ObjectInputStream(is);
+            Generation generation = (Generation) oi.readObject();
+
+             gene1 = generation.genes.get(0);
+             gene2 = generation.genes.get(1);
+
+            //miniMax.gene = geneA;
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    void setGene() {
+        if (turnA) {
+
+            miniMax.gene = miniMax.pathFinder.gene = gene1;
+            miniMax.pathFinder.its_A = miniMax.its_A = true;
+        } else {
+            miniMax.gene = miniMax.pathFinder.gene = gene2;
+            miniMax.pathFinder.its_A = miniMax.its_A = false;
+        }
     }
 
 }

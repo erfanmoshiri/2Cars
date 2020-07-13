@@ -7,7 +7,7 @@ import java.util.Random;
 public class Gene implements Serializable {
 
     double[] chromosome;
-    int point;
+    int point = 0;
 
     public Gene() {
         chromosome = new double[4];
@@ -16,6 +16,14 @@ public class Gene implements Serializable {
     public Gene(double n1, double n2, double n3, double n4) {
         chromosome = new double[]{n1, n2, n3, n4};
     }
+
+    public Gene(Gene gene) {
+        for (int i = 0; i < 4; i++) {
+            this.chromosome[i] = gene.chromosome[i];
+        }
+        this.point = 0;
+    }
+
 }
 
 class Generation implements Serializable {
@@ -26,8 +34,10 @@ class Generation implements Serializable {
     }
 }
 
-class Test implements Serializable {
-    public static void main(String[] args) {
+class initial_Generation implements Serializable {
+//    public static void main(String[] args) {
+//        ArrayList<Generation> generations = new ArrayList<>();
+//
 //        Generation generation = new Generation();
 //
 //        Gene gene = new Gene(1.5, 1.5, 1, 2);
@@ -35,7 +45,7 @@ class Test implements Serializable {
 //        generation.genes.add(gene);
 //        generation.genes.add(gene2);
 //
-//        for (int i = 0; i <= 7; i++) { //crossover - baznamaie khati - average
+//        for (int i = 0; i < 7; i++) { //crossover - baznamaie khati - average
 //            Random r = new Random();
 //            Gene gene3 = new Gene();
 //            for (int j = 0; j < 4; j++) {
@@ -44,6 +54,7 @@ class Test implements Serializable {
 //            }
 //            generation.genes.add(gene3);
 //        }
+//        generations.add(generation);
 //
 //        try {
 //            FileOutputStream os = new FileOutputStream(new File("src/Source/current_generation.txt"));
@@ -53,12 +64,13 @@ class Test implements Serializable {
 //            ObjectOutputStream oo2 = new ObjectOutputStream(os2);
 //
 //            oo.writeObject(generation);
+//            oo2.writeObject(generations);
 //
 //            oo.close();
 //            os.close();
 //            oo2.close();
 //            os2.close();
-//
+
 //            FileInputStream is = new FileInputStream("src/backup.txt");
 //            ObjectInputStream oi = new ObjectInputStream(is);
 //            Generation generation1 = (Generation) oi.readObject();
@@ -68,8 +80,9 @@ class Test implements Serializable {
 //                }
 //                System.out.println("");
 //            }
-//        } catch (IOException | ClassNotFoundException e) {
+//
+//        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-    }
+//    }
 }

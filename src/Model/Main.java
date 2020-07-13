@@ -164,7 +164,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         //root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Quoridor");
-        primaryStage.getIcons().add(new Image("/./sources/game_box.png"));
+        primaryStage.getIcons().add(new Image("/./Source/game_box.png"));
         primaryStage.setScene(new Scene(createContent()));
         primaryStage.setResizable(false);
         primaryStage.show();
@@ -174,12 +174,14 @@ public class Main extends Application {
     private void startGame() {
         if (playingWithAI) {
             playWithAI.rand();
+            playWithAI.readGenes();
             showTurn();
             if (playWithAI.turnA) {
                 AITurn();
             }
         } else if (playingAIvsAI) {
             playAIvsAI.rand();
+            playAIvsAI.readGenes();
             showTurn();
         } else {
             playWithFriend.rand();
@@ -440,6 +442,7 @@ public class Main extends Application {
 
     void AIvsAITurn() {
 
+        playAIvsAI.setGene();
         Object[] o = playAIvsAI.AIvsAITurn();
         if ((boolean) o[0]) {
             Point prev = (Point) o[1];

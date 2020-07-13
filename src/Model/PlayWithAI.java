@@ -1,6 +1,11 @@
 package Model;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+
 import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.min;
 
 public class PlayWithAI {
 
@@ -12,6 +17,7 @@ public class PlayWithAI {
     boolean turnA = false, turnB = false;
     char player;
     int wallB = 10, wallA = 10;
+
 
     void rand() {
         if (Math.random() > 0.5)
@@ -411,6 +417,22 @@ public class PlayWithAI {
 
         return o;
     }
+
+    void readGenes() {
+        try {
+            FileInputStream is = new FileInputStream("src/Source/current_generation.txt");
+            ObjectInputStream oi = new ObjectInputStream(is);
+            Generation generation = (Generation) oi.readObject();
+
+            Gene gene = generation.genes.get(1);
+            miniMax.gene = miniMax.pathFinder.gene = gene;
+            miniMax.pathFinder.its_A = miniMax.its_A = true;
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void main(String[] args) {
 
