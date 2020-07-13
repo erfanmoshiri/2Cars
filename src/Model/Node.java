@@ -27,8 +27,14 @@ public class Node {
     }
 
 
-    void calculateHeuristic() { //receives a gene
-        this.heuristic = (1.5 * this.hB - this.hA) + 1.4 * (this.wallA - this.wallB);
+    void calculateHeuristic(int turn) { //receives a gene
+        if (turn == 1) {
+
+            this.heuristic = (1.5 * this.hB - this.hA) + 1.4 * (this.wallA - this.wallB);
+        } else {
+
+            this.heuristic = (1.5 * this.hA - this.hB) + 1.4 * (this.wallB - this.wallA);
+        }
     }
 
 }
@@ -70,7 +76,7 @@ class MiniMAx {
             return 0;
         } else {
             if (level == depth) {
-                node.calculateHeuristic();
+                node.calculateHeuristic(turn);
                 return node.heuristic;
             }
             Node n, n1 = null;
@@ -149,8 +155,8 @@ class MiniMAx {
                     n1.hB = b.counter;
                 } else
                     System.out.println(" a weird null path for B");
-                n1.calculateHeuristic();
                 pathFinder.calculateForward(n1);
+                n1.calculateHeuristic(turn);
                 pq.add(n1);
             }
 
@@ -162,7 +168,7 @@ class MiniMAx {
                     for (int j = 1; j < 16; j += 2) // horizontal wall
                     {
                         for (int k = 0; k < 15; k += 2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, true);
+                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }
@@ -172,7 +178,7 @@ class MiniMAx {
                     for (int j = 0; j <= 14; j += 2) // vertical wall
                     {
                         for (int k = 1; k < 15; k += 2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, true);
+                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }
@@ -192,7 +198,7 @@ class MiniMAx {
                     for (int j = 1; j <= node.board.posB.x - 1; j += x1) // horizontal wall
                     {
                         for (int k = 0; k <= 14; k += x2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, true);
+                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }
@@ -207,7 +213,7 @@ class MiniMAx {
                     for (int j = 0; j <= node.board.posB.x - 2; j += x1) // vertical wall
                     {
                         for (int k = 5; k <= 13; k += x2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, true);
+                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }
@@ -236,7 +242,7 @@ class MiniMAx {
                 } else
                     System.out.println(" a weird null path for B");
 
-                n1.calculateHeuristic();
+                n1.calculateHeuristic(turn);
                 pq.add(n1);
             }
 
@@ -248,7 +254,7 @@ class MiniMAx {
                     for (int j = 1; j < 16; j += 2) // horizontal wall
                     {
                         for (int k = 0; k < 15; k += 2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, false);
+                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }
@@ -258,7 +264,7 @@ class MiniMAx {
                     for (int j = 0; j <= 14; j += 2) // vertical wall
                     {
                         for (int k = 1; k < 15; k += 2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, false);
+                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }
@@ -274,7 +280,7 @@ class MiniMAx {
                     for (int j = node.board.posA.x + 1; j < 16; j += x1) // horizontal wall
                     {
                         for (int k = 0; k < 15; k += x2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, false);
+                            n2 = pathFinder.puttingWall(node, j, k, j, k + 2, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }
@@ -288,7 +294,7 @@ class MiniMAx {
                     for (int j = node.board.posA.x; j <= 14; j += 2) // vertical wall
                     {
                         for (int k = 5; k <= 13; k += 2) {
-                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, false);
+                            n2 = pathFinder.puttingWall(node, j, k, j + 2, k, turn);
                             if (n2 != null) {
                                 pq.add(n2);
                             }

@@ -408,7 +408,7 @@ public class PathFinder {
     }
 
 
-    Node puttingWall(Node node, int x1, int y1, int x2, int y2, boolean turnA) {
+    Node puttingWall(Node node, int x1, int y1, int x2, int y2, int turn) {
 
         int temp1 = (y1 + y2) / 2;
         int temp2 = (x1 + x2) / 2;
@@ -426,13 +426,13 @@ public class PathFinder {
                         n.hB = posB.counter;
                         n.wall1 = new Point(x1, y1);
                         n.wall2 = new Point(x2, y2);
-                        if (turnA) {
+                        if (turn == 1) {
                             n.wallA--;
 
                         } else {
                             n.wallB--;
                         }
-                        n.calculateHeuristic();
+                        n.calculateHeuristic(turn);
                         calculateForward(n);
                         //System.out.println("////////////Forward : " + n.forwardA);
                     } else {
