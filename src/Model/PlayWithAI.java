@@ -13,7 +13,6 @@ public class PlayWithAI {
     char player;
     int wallB = 10, wallA = 10;
 
-
     void rand() {
         if (Math.random() > 0.5)
             turnA = true;

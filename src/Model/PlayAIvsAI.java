@@ -21,14 +21,14 @@ public class PlayAIvsAI {
             turnB = true;
     }
 
-    void initiateGenes() {
-
-        gene1 = new Gene(0);
-        gene1.chromosome = new double[]{1.0, 2.1, 2, 1, 0, 1.4, 1.8, 1.3};
-        gene2 = new Gene(1);
-        gene2.chromosome = new double[]{1.0, 2.1, 2, 1, 0, 1.4, 1.8, 1.3};
-
-    }
+//    void initiateGenes() {
+//
+//        gene1 = new Gene(0);
+//        gene1.chromosome = new double[]{1.0, 2.1, 2, 1, 0, 1.4, 1.8, 1.3};
+//        gene2 = new Gene(1);
+//        gene2.chromosome = new double[]{1.0, 2.1, 2, 1, 0, 1.4, 1.8, 1.3};
+//
+//    }
 
     void updateTurn() {
         turnA = !turnA;
