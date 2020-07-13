@@ -18,6 +18,10 @@ import javafx.stage.Stage;
 
 import static javafx.application.Platform.exit;
 
+/*controls the UI of the application
+ this application uses JavaFX to provide the graphic
+ that uses specific type of functions and parameters
+ */
 public class Main extends Application {
     Tile[][] tiles;
     Text turnText;
@@ -43,21 +47,25 @@ public class Main extends Application {
         root.setPrefSize(900, 600);
         root.setBackground(new Background(new BackgroundFill(Color.web("#EEDEC0"), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        friendButton = new Button("PLAY WITH A FRIEND");
+        /*
+        buttons that user decides the mode of the game by
+         */
+
+        friendButton = new Button("PLAY WITH A FRIEND"); //to play multiplayer game
         friendButton.setPrefHeight(35);
         friendButton.setPrefWidth(140);
         friendButton.setTranslateX(360);
         friendButton.setTranslateY(230);
         root.getChildren().add(friendButton);
 
-        AIButton = new Button("PLAY WITH AI");
+        AIButton = new Button("PLAY WITH AI"); // to play with AI
         AIButton.setPrefHeight(35);
         AIButton.setPrefWidth(140);
         AIButton.setTranslateX(360);
         AIButton.setTranslateY(270);
         root.getChildren().add(AIButton);
 
-        AIvsAIButton = new Button("AI Vs. AI");
+        AIvsAIButton = new Button("AI Vs. AI"); // to watch AI plays with AI
         AIvsAIButton.setPrefHeight(35);
         AIvsAIButton.setPrefWidth(140);
         AIvsAIButton.setTranslateX(360);
@@ -72,6 +80,10 @@ public class Main extends Application {
         root.getChildren().add(goAI);
         goAI.setVisible(false);
 
+
+        /*
+        a set of texts that are displayed during the game
+         */
         warningText = new Text("");
         turnText = new Text("your`s turn");
         wallsNum = new Text("number of walls");
@@ -468,7 +480,5 @@ public class Main extends Application {
         playAIvsAI.updateTurn();
         showTurn();
 
-
     }
-
 }

@@ -18,6 +18,8 @@ public class Gene implements Serializable {
     }
 
     public Gene(Gene gene) {
+
+        chromosome = new double[4];
         for (int i = 0; i < 4; i++) {
             this.chromosome[i] = gene.chromosome[i];
         }
@@ -27,6 +29,7 @@ public class Gene implements Serializable {
 }
 
 class Generation implements Serializable {
+
     ArrayList<Gene> genes;
 
     public Generation() {

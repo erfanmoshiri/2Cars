@@ -19,27 +19,45 @@ public class Learning implements Serializable {
             oi.close();
             is.close();
 
+            for (int i = 0; i < 9; i++) {
+                System.out.println(generation.genes.get(i).point);
+                for (int j = 0; j < 4; j++) {
+                    System.out.print(generation.genes.get(i).chromosome[j] + " , ");
+                }
+                System.out.println("");
+            }
+            System.out.println("////////////////////////////");
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     void play() {
-        for (int i = 0; i < 7; i += 3) {
+        for (int i = 0; i < 3; i += 3) {
             int k = i;
             for (int j = k + 1; j < i + 3; j++) {
                 playAIvsAI = new PlayAIvsAI();
                 playAIvsAI.turnA = true;
                 playAIvsAI.gene1 = generation.genes.get(k);
                 playAIvsAI.gene2 = generation.genes.get(j);
-                for (int h = 0; h < 200; h++){
+
+                System.out.println("/////////////////////");
+                System.out.println("gene " + k + " , playing with gene " + j);
+                System.out.println("/////////////////////");
+
+                for (int h = 0; h < 200; h++) {
                     playAIvsAI.setGene();
                     playAIvsAI.AIvsAITurn();
                     if (playAIvsAI.goalState()) {
-                        if (playAIvsAI.turnA)
+                        if (playAIvsAI.turnA) {
+                            System.out.println("gene " + k + " won");
                             generation.genes.get(k).point += 1;
-                        else
+                        }
+                        else {
+                            System.out.println("gene " + j + " won");
                             generation.genes.get(j).point += 1;
+                        }
                         break;
                     } else {
                         playAIvsAI.updateTurn();
@@ -52,7 +70,12 @@ public class Learning implements Serializable {
     }
 
     void generateNextGeneration() {
+
+        //sorts the generation
         sort(generation.genes, 0, generation.genes.size() - 1);
+
+        nextGeneration = new Generation();
+
         for (int i = 0; i < 3; i++) {
             nextGeneration.genes.add(new Gene(generation.genes.get(i)));
         }
@@ -114,7 +137,7 @@ public class Learning implements Serializable {
         int pivot = arr.get(high).point;
         int i = (low - 1);
         for (int j = low; j < high; j++) {
-            if (arr.get(j).point < pivot) {
+            if (arr.get(j).point > pivot) {
                 i++;
                 Gene temp = arr.get(i);
                 arr.set(i, arr.get(j));
@@ -140,10 +163,12 @@ public class Learning implements Serializable {
 
 class AutoLearning {
     public static void main(String[] args) {
+
         Learning learning = new Learning();
         learning.readGeneration();
         learning.play();
         learning.generateNextGeneration();
         learning.writeGeneration();
+
     }
 }

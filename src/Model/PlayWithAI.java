@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import static java.lang.StrictMath.abs;
-import static java.lang.StrictMath.min;
 
 public class PlayWithAI {
 
@@ -433,15 +432,4 @@ public class PlayWithAI {
         }
     }
 
-
-    public static void main(String[] args) {
-
-        int a = 5;
-        int b = 3;
-        double f = 3.4;
-        double e = a + b + f;
-        double d = 11.43;
-        System.out.println(d > e);
-
-    }
 }

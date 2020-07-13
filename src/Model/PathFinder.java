@@ -30,7 +30,6 @@ public class PathFinder {
         while (!queue.isEmpty()) {
             Pos pt = queue.peek();
             if (pt.point.x == des) { // reach end line
-//                System.out.println("counter : " + pt.counter + " , " + turnA);
                 return pt;
             }
             queue.poll();
@@ -48,8 +47,6 @@ public class PathFinder {
         int currX = pos.point.x;
         int currY = pos.point.y;
         int counter = pos.counter;
-
-//        if (turnA) {
 
         if (currX <= 14) {
             if (board[currX + 1][currY] != 'W') {
@@ -314,7 +311,6 @@ public class PathFinder {
                         }
                         calculateForward(n);
                         n.calculateHeuristic(its_A, gene);
-                        //System.out.println("////////////Forward : " + n.forwardA);
                     } else {
                         return null;
                     }

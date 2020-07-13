@@ -4,8 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import static java.lang.StrictMath.abs;
-
 public class PlayAIvsAI {
 
     MiniMAx miniMax = new MiniMAx();
@@ -25,32 +23,10 @@ public class PlayAIvsAI {
             turnB = true;
     }
 
-//    void initiateGenes() {
-//
-//        gene1 = new Gene(0);
-//        gene1.chromosome = new double[]{1.0, 2.1, 2, 1, 0, 1.4, 1.8, 1.3};
-//        gene2 = new Gene(1);
-//        gene2.chromosome = new double[]{1.0, 2.1, 2, 1, 0, 1.4, 1.8, 1.3};
-//
-//    }
-
     void updateTurn() {
         turnA = !turnA;
         turnB = !turnB;
     }
-
-    void updateCurrent() {
-        if (turnA) {
-            currX = game.posA.x;
-            currY = game.posA.y;
-            player = 'A';
-        } else {
-            currX = game.posB.x;
-            currY = game.posB.y;
-            player = 'B';
-        }
-    }
-
 
     boolean goalState() {
         if (turnA) {
@@ -124,8 +100,6 @@ public class PlayAIvsAI {
 
         }
 
-//        System.out.println(game.posB.x + " , " + game.posB.y);
-
         return o;
     }
 
@@ -137,8 +111,6 @@ public class PlayAIvsAI {
 
              gene1 = generation.genes.get(0);
              gene2 = generation.genes.get(1);
-
-            //miniMax.gene = geneA;
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

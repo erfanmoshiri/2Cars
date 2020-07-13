@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.LinkedList;
-
 import static java.lang.StrictMath.abs;
 
 public class PlayWithFriend {
@@ -343,42 +341,6 @@ public class PlayWithFriend {
         return "false";
     }
 
-//    boolean isValid(int row, int col) {
-//        return (row >= 0) && (row < 17) && (col >= 0) && (col < 17);
-//    }
-//
-//    boolean BFS(char[][] board, Point src, Point dest) {
-//        if (board[dest.x][dest.y] == 'W')
-//            return false;
-//
-//        boolean[][] visited = new boolean[17][17];
-//
-//        visited[src.x][src.y] = true;
-//
-//        LinkedList<Point> queue = new LinkedList<Point>();
-//
-//        queue.push(src);
-//
-//        int row, col;
-//        while (!queue.isEmpty()) {
-//            Point pt = queue.peek();
-//            if (pt.x == dest.x && pt.y == dest.y) // reach end line
-//                return true;
-//
-//            queue.pop();
-//
-//            for (int i = 0; i < 4; i++) {
-//                row = pt.x + rowNum[i];
-//                col = pt.y + colNum[i];
-//                if (isValid(row, col) && board[row][col] != 'W' && !visited[row][col]) {
-//                    visited[row][col] = true;
-//                    Point prvPoint = new Point(row, col);
-//                    queue.push(prvPoint);
-//                }
-//            }
-//        }
-//        return false;
-//    }
 
     boolean hasPath(Board path) {
         boolean pathA = false, pathB = false;
@@ -390,17 +352,6 @@ public class PlayWithFriend {
         if(pathFinder.BFS(pointB, 0, path.board, turnB) != null)
             pathB = true;
 
-//        for (int i = 0; i < 9; i++) { // open path for A
-//            Point dest = new Point(16, i * 2);
-//            if (BFS(path.board, pointA, dest))
-//                pathA = true;
-//        }
-//
-//        for (int i = 0; i < 9; i++) { // open path for B
-//            Point dest = new Point(0, i * 2);
-//            if (BFS(path.board, pointB, dest))
-//                pathB = true;
-//        }
         return pathA && pathB;
     }
 

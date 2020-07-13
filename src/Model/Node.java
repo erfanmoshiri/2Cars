@@ -14,11 +14,8 @@ public class Node {
     int wallA;
     int wallB;
     Board board;
-    Point wall1 = null; // badan befahmim divar ezafe shode ya player jabeja shode
+    Point wall1 = null; // too realize if new walls are added in the next state
     Point wall2 = null;
-//    PriorityQueue<Node> childs = null;
-    //float[] gene = new float[8];
-
 
     public Node(int wallA, int wallB, Board board) {
         this.wallA = wallA;
@@ -100,7 +97,6 @@ class MiniMAx {
                 double best = -1 * Double.MAX_VALUE;
                 double value;
                 childs = childGenerator(node, level, depth, turn);
-//                System.out.println("level : " + level + " , childs : " + node.childs.size());
 
                 while (!childs.isEmpty()) {
                     n = childs.poll();
@@ -118,7 +114,6 @@ class MiniMAx {
                     finalNode = n1;
                 }
                 return best;
-
 
             } else {
 
@@ -155,8 +150,6 @@ class MiniMAx {
             nodes = pathFinder.movePlayer(n, 'A');
             while (!nodes.isEmpty()) {
                 n1 = nodes.poll();
-//                n1.hA = pathFinder.BFS(n1.board.posA, 16, n1.board.board, true).counter;
-//                n1.hB = pathFinder.BFS(n1.board.posB, 0, n1.board.board, false).counter;
                 Pos a = pathFinder.BFS(n1.board.posA, 16, n1.board.board, true);
                 Pos b = pathFinder.BFS(n1.board.posB, 0, n1.board.board, false);
                 if (a != null) {
@@ -217,7 +210,6 @@ class MiniMAx {
                         }
                     }
 
-
                     x1 = r.nextInt(2) + 1;
                     x1 *= 2;
                     x2 = r.nextInt(2) + 1;
@@ -261,7 +253,6 @@ class MiniMAx {
 
             if (node.wallB != 0) {
 
-
                 if (level == 1) {
 
                     for (int j = 1; j < 16; j += 2) // horizontal wall
@@ -304,9 +295,9 @@ class MiniMAx {
                     x1 *= 2;
                     x2 = r.nextInt(2) + 1;
                     x2 *= 2;
-                    for (int j = node.board.posA.x; j <= 14; j += 2) // vertical wall
+                    for (int j = node.board.posA.x; j <= 14; j += x1) // vertical wall
                     {
-                        for (int k = 5; k <= 13; k += 2) {
+                        for (int k = 5; k <= 13; k += x2) {
                             n2 = pathFinder.puttingWall(node, j, k, j + 2, k, turn);
                             if (n2 != null) {
                                 pq.add(n2);
