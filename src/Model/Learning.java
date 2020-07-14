@@ -19,14 +19,6 @@ public class Learning implements Serializable {
             oi.close();
             is.close();
 
-            for (int i = 0; i < 9; i++) {
-                System.out.println(generation.genes.get(i).point);
-                for (int j = 0; j < 4; j++) {
-                    System.out.print(generation.genes.get(i).chromosome[j] + " , ");
-                }
-                System.out.println("");
-            }
-            System.out.println("////////////////////////////");
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
